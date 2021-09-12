@@ -18,7 +18,10 @@ namespace GECORO.Persistence
 
         public async Task<Cliente[]> GetAllClientesAsync()
         {
-            IQueryable<Cliente> query = context.Clientes.Include(c => c.Contratos);
+            IQueryable<Cliente> query = context.Clientes
+                                        .Include(c => c.Contratos)
+                                        .Include(c => c.VendedoresClientes)
+                                        .ThenInclude(vc => vc.Vendedor);
 
             query = query.OrderBy(c => c.Id);
 
@@ -27,7 +30,10 @@ namespace GECORO.Persistence
 
         public async Task<Cliente> GetClienteByCPFAsync(string CPF)
         {
-            IQueryable<Cliente> query = context.Clientes.Include(c => c.Contratos);
+            IQueryable<Cliente> query = context.Clientes
+                                        .Include(c => c.Contratos)
+                                        .Include(c => c.VendedoresClientes)
+                                        .ThenInclude(vc => vc.Vendedor);
 
             query = query.OrderBy(c => c.Id).Where(c => c.CPF == CPF);
 
@@ -36,7 +42,10 @@ namespace GECORO.Persistence
 
         public async Task<Cliente> GetClienteByIdAsync(int id)
         {
-            IQueryable<Cliente> query = context.Clientes.Include(c => c.Contratos);
+            IQueryable<Cliente> query = context.Clientes
+                                        .Include(c => c.Contratos)
+                                        .Include(c => c.VendedoresClientes)
+                                        .ThenInclude(vc => vc.Vendedor);
 
             query = query.OrderBy(c => c.Id).Where(c => c.Id == id);
 
@@ -45,7 +54,10 @@ namespace GECORO.Persistence
 
         public async Task<Cliente[]> GetClientesByNomeAsync(string nome)
         {
-            IQueryable<Cliente> query = context.Clientes.Include(c => c.Contratos);
+            IQueryable<Cliente> query = context.Clientes
+                                                .Include(c => c.Contratos)
+                                                .Include(c => c.VendedoresClientes)
+                                                .ThenInclude(vc => vc.Vendedor);
 
             query = query.OrderBy(c => c.Id).Where(c => c.Nome.ToLower().Contains(nome.ToLower()));
 

@@ -22,12 +22,20 @@ namespace GECORO.Persistence.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("CPF")
+                        .IsRequired()
+                        .HasMaxLength(11)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Nome")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("VendedorId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
+
+                    b.HasAlternateKey("CPF");
 
                     b.ToTable("Clientes");
                 });
@@ -42,6 +50,8 @@ namespace GECORO.Persistence.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("NuContrato")
+                        .IsRequired()
+                        .HasMaxLength(10)
                         .HasColumnType("TEXT");
 
                     b.Property<decimal>("SaldoDevedor")
@@ -51,6 +61,8 @@ namespace GECORO.Persistence.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasAlternateKey("NuContrato");
 
                     b.HasIndex("ClienteId");
 
@@ -82,7 +94,7 @@ namespace GECORO.Persistence.Migrations
                     b.ToTable("Parcelas");
                 });
 
-            modelBuilder.Entity("GECORO.Domain.RegraContrato", b =>
+            modelBuilder.Entity("GECORO.Domain.RegraVendedor", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -102,7 +114,7 @@ namespace GECORO.Persistence.Migrations
                     b.HasIndex("VendedorId")
                         .IsUnique();
 
-                    b.ToTable("RegraContrato");
+                    b.ToTable("RegraVendedor");
                 });
 
             modelBuilder.Entity("GECORO.Domain.Vendedor", b =>
@@ -112,27 +124,32 @@ namespace GECORO.Persistence.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Codigo")
+                        .IsRequired()
+                        .HasMaxLength(5)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Nome")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
+                    b.HasAlternateKey("Codigo");
+
                     b.ToTable("Vendedores");
                 });
 
-            modelBuilder.Entity("GECORO.Domain.VendedorCliente", b =>
+            modelBuilder.Entity("GECORO.Domain.VendedoresClientes", b =>
                 {
-                    b.Property<int>("VendedorId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int>("ClienteId")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("VendedorId", "ClienteId");
+                    b.Property<int>("VendedorId")
+                        .HasColumnType("INTEGER");
 
-                    b.HasIndex("ClienteId");
+                    b.HasKey("ClienteId");
+
+                    b.HasIndex("VendedorId");
 
                     b.ToTable("VendedoresClientes");
                 });
@@ -142,7 +159,7 @@ namespace GECORO.Persistence.Migrations
                     b.HasOne("GECORO.Domain.Cliente", "Cliente")
                         .WithMany("Contratos")
                         .HasForeignKey("ClienteId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Cliente");
@@ -150,29 +167,31 @@ namespace GECORO.Persistence.Migrations
 
             modelBuilder.Entity("GECORO.Domain.Parcela", b =>
                 {
-                    b.HasOne("GECORO.Domain.Contrato", null)
+                    b.HasOne("GECORO.Domain.Contrato", "Contrato")
                         .WithMany("Parcelas")
                         .HasForeignKey("ContratoId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
+
+                    b.Navigation("Contrato");
                 });
 
-            modelBuilder.Entity("GECORO.Domain.RegraContrato", b =>
+            modelBuilder.Entity("GECORO.Domain.RegraVendedor", b =>
                 {
                     b.HasOne("GECORO.Domain.Vendedor", "Vendedor")
-                        .WithOne("RegraContrato")
-                        .HasForeignKey("GECORO.Domain.RegraContrato", "VendedorId")
+                        .WithOne("RegraVendedor")
+                        .HasForeignKey("GECORO.Domain.RegraVendedor", "VendedorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Vendedor");
                 });
 
-            modelBuilder.Entity("GECORO.Domain.VendedorCliente", b =>
+            modelBuilder.Entity("GECORO.Domain.VendedoresClientes", b =>
                 {
                     b.HasOne("GECORO.Domain.Cliente", "Cliente")
-                        .WithMany()
-                        .HasForeignKey("ClienteId")
+                        .WithOne("VendedoresClientes")
+                        .HasForeignKey("GECORO.Domain.VendedoresClientes", "ClienteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -190,6 +209,8 @@ namespace GECORO.Persistence.Migrations
             modelBuilder.Entity("GECORO.Domain.Cliente", b =>
                 {
                     b.Navigation("Contratos");
+
+                    b.Navigation("VendedoresClientes");
                 });
 
             modelBuilder.Entity("GECORO.Domain.Contrato", b =>
@@ -199,7 +220,7 @@ namespace GECORO.Persistence.Migrations
 
             modelBuilder.Entity("GECORO.Domain.Vendedor", b =>
                 {
-                    b.Navigation("RegraContrato");
+                    b.Navigation("RegraVendedor");
 
                     b.Navigation("VendedoresClientes");
                 });

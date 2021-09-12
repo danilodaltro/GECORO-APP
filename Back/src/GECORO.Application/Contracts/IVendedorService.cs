@@ -1,17 +1,18 @@
 using System.Threading.Tasks;
+using GECORO.Application.Dto;
 using GECORO.Domain;
 
 namespace GECORO.Application.Contracts
 {
     public interface IVendedorService
     {
-        public Task<Vendedor> AddVendedor(Vendedor model);
-        public Task<Vendedor> UpdateVendedor(int vendedorId, Vendedor model);
+        public Task<VendedorDto> AddVendedor(VendedorDto model);
+        public Task<VendedorDto> UpdateVendedor(int vendedorId, VendedorDto model);
         public Task<bool> DeleteVendedor(int vendedorId);
-        Task<Vendedor[]> GetAllVendedoresAsync(bool incluiClientes);
-        Task<Vendedor[]> GetAllVendedoresByNomeAsync(string nome, bool incluiClientes);
-        Task<Vendedor> GetVendedorByCodigoAsync(string codigo, bool incluiClientes);
-        Task<Vendedor> GetVendedorByIdAsync(int vendedorId, bool incluiClientes);
+        Task<VendedorDto[]> GetAllVendedoresAsync(bool incluiClientes);
+        Task<VendedorDto[]> GetAllVendedoresByNomeAsync(string nome, bool incluiClientes);
+        Task<VendedorDto> GetVendedorByCodigoAsync(string codigo, bool incluiClientes);
+        Task<VendedorDto> GetVendedorByIdAsync(int vendedorId, bool incluiClientes);
     }
 
 }

@@ -19,10 +19,10 @@ namespace GECORO.Persistence
         public async Task<Vendedor[]> GetAllVendedoresAsync(bool incluiClientes = false)
         {
             IQueryable<Vendedor> query = context.Vendedores
-                                        .Include(v => v.RegraContrato);
+                                        .Include(v => v.RegraVendedor);
 
             if (incluiClientes)
-                query.Include(v => v.VendedoresClientes).ThenInclude(c => c.Cliente);
+                query.Include(v => v.VendedoresClientes).ThenInclude(vc => vc.Cliente);
 
             query = query.OrderBy(v => v.Id);
 
@@ -32,10 +32,10 @@ namespace GECORO.Persistence
         public async Task<Vendedor[]> GetAllVendedoresByNomeAsync(string nome, bool incluiClientes)
         {
             IQueryable<Vendedor> query = context.Vendedores
-                            .Include(v => v.RegraContrato);
+                            .Include(v => v.RegraVendedor);
 
             if (incluiClientes)
-                query.Include(v => v.VendedoresClientes).ThenInclude(c => c.Cliente);
+                query.Include(v => v.VendedoresClientes).ThenInclude(vc => vc.Cliente);
 
             query = query.OrderBy(v => v.Id).Where(v => v.Nome.ToLower().Contains(nome.ToLower()));
 
@@ -45,10 +45,10 @@ namespace GECORO.Persistence
         public async Task<Vendedor> GetVendedorByCodigoAsync(string codigo, bool incluiClientes = false)
         {
             IQueryable<Vendedor> query = context.Vendedores
-                            .Include(v => v.RegraContrato);
+                            .Include(v => v.RegraVendedor);
 
             if (incluiClientes)
-                query.Include(v => v.VendedoresClientes).ThenInclude(c => c.Cliente);
+                query.Include(v => v.VendedoresClientes).ThenInclude(vc => vc.Cliente);
 
             query = query.OrderBy(v => v.Id).Where(v => v.Codigo == codigo);
 
@@ -58,10 +58,10 @@ namespace GECORO.Persistence
         public async Task<Vendedor> GetVendedorByIdAsync(int id, bool incluiClientes = false)
         {
             IQueryable<Vendedor> query = context.Vendedores
-                .Include(v => v.RegraContrato);
+                .Include(v => v.RegraVendedor);
 
             if (incluiClientes)
-                query.Include(v => v.VendedoresClientes).ThenInclude(c => c.Cliente);
+                query.Include(v => v.VendedoresClientes).ThenInclude(vc => vc.Cliente);
 
             query = query.OrderBy(v => v.Id).Where(v => v.Id == id);
 

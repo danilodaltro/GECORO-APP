@@ -1,6 +1,8 @@
 using System;
 using System.Threading.Tasks;
+using AutoMapper;
 using GECORO.Application.Contracts;
+using GECORO.Application.Dto;
 using GECORO.Domain;
 using GECORO.Persistence.Contracts;
 
@@ -10,20 +12,29 @@ namespace GECORO.Application
     {
         private readonly IVendedorPersist vendedorPersist;
         private readonly IGeneralPersist generalPersist;
-        public VendedorService(IGeneralPersist generalPersist, IVendedorPersist vendedorPersist)
+        private readonly IMapper mapper;
+        public VendedorService(IGeneralPersist generalPersist, IVendedorPersist vendedorPersist, IMapper mapper)
         {
-            this.generalPersist = generalPersist;
             this.vendedorPersist = vendedorPersist;
+            this.generalPersist = generalPersist;
+            this.mapper = mapper;
         }
 
-        public async Task<Vendedor> AddVendedor(Vendedor model)
+        public async Task<VendedorDto> AddVendedor(VendedorDto model)
         {
             try
             {
-                generalPersist.Add<Vendedor>(model);
+                var vendedor = mapper.Map<Vendedor>(model);
+
+                var validaVendedor = await vendedorPersist.GetVendedorByCodigoAsync(vendedor.Codigo);
+                if(validaVendedor != null) 
+                    return null;
+
+                generalPersist.Add<Vendedor>(vendedor);
                 if (await generalPersist.SaveChangesAsync())
                 {
-                    return await vendedorPersist.GetVendedorByIdAsync(model.Id, false);
+                    var vendedorRetorno = await vendedorPersist.GetVendedorByIdAsync(vendedor.Id, false);
+                    return mapper.Map<VendedorDto>(vendedorRetorno);
                 }
                 return null;
             }
@@ -33,18 +44,22 @@ namespace GECORO.Application
             }
         }
 
-        public async Task<Vendedor> UpdateVendedor(int vendedorId, Vendedor model)
+        public async Task<VendedorDto> UpdateVendedor(int vendedorId, VendedorDto model)
         {
             try
             {
                 var vendedor = await vendedorPersist.GetVendedorByIdAsync(vendedorId, false);
                 if (vendedor == null) return null;
 
-                generalPersist.Update<Vendedor>(model);
+                model.Id = vendedor.Id;
+                mapper.Map(model,vendedor);
+
+                generalPersist.Update<Vendedor>(vendedor);
 
                 if (await generalPersist.SaveChangesAsync())
                 {
-                    return await vendedorPersist.GetVendedorByIdAsync(model.Id, false);
+                    var vendedorRetorno = await vendedorPersist.GetVendedorByIdAsync(vendedor.Id, false);
+                    return mapper.Map<VendedorDto>(vendedorRetorno);
                 }
                 return null;
 
@@ -71,14 +86,14 @@ namespace GECORO.Application
             }
         }
 
-        public async Task<Vendedor[]> GetAllVendedoresAsync(bool incluiVendedor)
+        public async Task<VendedorDto[]> GetAllVendedoresAsync(bool incluiClientes)
         {
             try
             {
-                var vendedores = await vendedorPersist.GetAllVendedoresAsync(incluiVendedor);
+                var vendedores = await vendedorPersist.GetAllVendedoresAsync(incluiClientes);
                 if (vendedores == null) return null;
 
-                return vendedores;
+                return mapper.Map<VendedorDto[]>(vendedores);
             }
             catch (Exception ex)
             {
@@ -86,14 +101,14 @@ namespace GECORO.Application
             }
         }
 
-        public async Task<Vendedor[]> GetAllVendedoresByNomeAsync(string nome, bool incluiVendedor)
+        public async Task<VendedorDto[]> GetAllVendedoresByNomeAsync(string nome, bool incluiClientes)
         {
             try
             {
-                var vendedores = await vendedorPersist.GetAllVendedoresByNomeAsync(nome, incluiVendedor);
+                var vendedores = await vendedorPersist.GetAllVendedoresByNomeAsync(nome, incluiClientes);
                 if (vendedores == null) return null;
 
-                return vendedores;
+                return mapper.Map<VendedorDto[]>(vendedores);
 
             }
             catch (Exception ex)
@@ -103,14 +118,14 @@ namespace GECORO.Application
         }
 
 
-        public async Task<Vendedor> GetVendedorByCodigoAsync(string codigo, bool incluiVendedor)
+        public async Task<VendedorDto> GetVendedorByCodigoAsync(string codigo, bool incluiClientes)
         {
             try
             {
-                var vendedor = await vendedorPersist.GetVendedorByCodigoAsync(codigo, incluiVendedor);
+                var vendedor = await vendedorPersist.GetVendedorByCodigoAsync(codigo, incluiClientes);
                 if (vendedor == null) return null;
 
-                return vendedor;
+                return mapper.Map<VendedorDto>(vendedor);
 
             }
             catch (Exception ex)
@@ -119,14 +134,14 @@ namespace GECORO.Application
             }
         }
 
-        public async Task<Vendedor> GetVendedorByIdAsync(int vendedorId, bool incluiVendedor)
+        public async Task<VendedorDto> GetVendedorByIdAsync(int vendedorId, bool incluiClientes)
         {
             try
             {
-                var vendedor = await vendedorPersist.GetVendedorByIdAsync(vendedorId, incluiVendedor);
+                var vendedor = await vendedorPersist.GetVendedorByIdAsync(vendedorId, incluiClientes);
                 if (vendedor == null) return null;
 
-                return vendedor;
+                return mapper.Map<VendedorDto>(vendedor);
 
             }
             catch (Exception ex)

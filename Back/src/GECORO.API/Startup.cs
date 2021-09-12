@@ -1,5 +1,4 @@
 using GECORO.Persistence.Context;
-using GECORO.Persistence.Trigger;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +11,7 @@ using GECORO.Application.Contracts;
 using GECORO.Persistence.Contracts;
 using GECORO.Persistence;
 using GECORO.Application;
+using System;
 
 namespace GECORO.API
 {
@@ -32,7 +32,6 @@ namespace GECORO.API
                 context =>
                 {
                     context.UseSqlite(Configuration.GetConnectionString("Default"));
-                    context.UseTriggers(tiggeroptions => tiggeroptions.AddTrigger<ValidarVendedorCliente>());
                 }
             );
 
@@ -42,9 +41,18 @@ namespace GECORO.API
                     ReferenceLoopHandling.Ignore
             );
 
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
             services.AddScoped<IVendedorService, VendedorService>();
+            services.AddScoped<IClienteService,ClienteService>();
+            services.AddScoped<IContratoService, ContratoService>();
+            services.AddScoped<IParcelaService, ParcelaService>();
+
             services.AddScoped<IGeneralPersist, GeneralPersist>();
             services.AddScoped<IVendedorPersist, VendedorPersist>();
+            services.AddScoped<IClientePersist, ClientePersist>();
+            services.AddScoped<IContratoPersist, ContratoPersist>();
+            services.AddScoped<IParcelaPersist, ParcelaPersist>();
 
             services.AddCors();
 
