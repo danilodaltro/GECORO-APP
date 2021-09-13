@@ -13,7 +13,7 @@
     </div>
 
     <div>
-      <a class="d-flex btn btn-outline-primary" routerLink="/eventos/detalhe">
+      <a class="d-flex btn btn-outline-primary" routerLink="/vendedores/detalhes">
         <i class="fa fa-plus-circle my-1"></i>
         <b class="ms-1 d-none d-sm-block">Novo</b>
       </a>
@@ -25,6 +25,7 @@
           <th>Nome</th>
           <th>Código</th>
           <th>Clientes</th>
+          <th>Contratos</th>
           <th>Regras</th>
           <th>Opções</th>
       </tr>
@@ -34,6 +35,7 @@
           <td>{{vendedor.nome}}</td>
           <td>{{vendedor.codigo}}</td>
           <td><a routerLink="/clientes/vendedor/{{vendedor.id}}">Clientes</a></td>
+          <td><a routerLink="/contratos/vendedor/{{vendedor.id}}">Contratos</a></td>
           <td>Regras</td>
           <td>
             <button type="button" class="btn btn-primary btn-sm me-2" tooltip="Editar">

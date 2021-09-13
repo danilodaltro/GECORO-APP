@@ -22,6 +22,10 @@ export class ContratoService {
     return this.http.get<Contrato[]>(`${this.baseURL}/cliente/${clienteId}`).pipe(take(1));
   }
 
+  public getContratosByVendedor(vendedorId: number): Observable<Contrato[]>{
+    return this.http.get<Contrato[]>(`${this.baseURL}/vendedor/${vendedorId}`).pipe(take(1));
+  }
+
   public getContratoById(id: number): Observable<Contrato>{
     return this.http.get<Contrato>(`${this.baseURL}/${id}`).pipe(take(1));
   }

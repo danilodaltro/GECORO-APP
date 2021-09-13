@@ -1,3 +1,44 @@
-<p>
-  clientes-detalhes works!
-</p>
+<form [formGroup]="form">
+  <div class="p-3">
+    <div class="form-row">
+      <div class="form-group col-md-10">
+        <label>Nome</label>
+        <input type="text" class="form-control" placeholder="Nome"
+        [ngClass]="{'is-invalid': f.nome.errors && f.nome.touched}"
+        formControlName="nome">
+        <div *ngIf="f.nome.errors?.required" class="invalid-feedback">
+          Nome é obrigatório
+        </div>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-5">
+        <label>CPF</label>
+        <input type="text" class="form-control" placeholder="CPF sem pontos e hífen"
+        [ngClass]="{'is-invalid': f.cpf.errors && f.cpf.touched}"
+        formControlName="cpf">
+        <div *ngIf="f.cpf.errors?.required" class="invalid-feedback">
+          CPF é obrigatório
+        </div>
+        <div *ngIf="f.cpf.errors?.maxlength || f.cpf.errors?.minlength" class="invalid-feedback">
+          CPF deve ter 11 digitos
+        </div>
+        <div *ngIf="f.cpf.errors?.pattern" class="invalid-feedback">
+          CPF formado apenas por números
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card-footer">
+    <div class="d-flex">
+      <a routerLink="/clientes/lista" class="mr-auto">
+        <button class="btn btn-outline-secondary border">
+        Cancelar
+        </button>
+      </a>
+      <button class="btn btn-success">
+        Salvar
+      </button>
+    </div>
+  </div>
+</form>

@@ -3,7 +3,7 @@ import { CUSTOM_ELEMENTS_SCHEMA, DEFAULT_CURRENCY_CODE, LOCALE_ID, NgModule } fr
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http'
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
@@ -55,8 +55,7 @@ registerLocaleData(ptBr);
     ParcelasDetalhesComponent,
     NavComponent,
     TituloComponent,
-    CpfPipePipe,
-
+    CpfPipePipe
   ],
   imports: [
     BrowserModule,
@@ -74,7 +73,8 @@ registerLocaleData(ptBr);
       positionClass: 'toast-bottom-right',
       preventDuplicates: true,
       progressBar: true
-    })
+    }),
+    ReactiveFormsModule
   ],
   providers: [
     ContratoService,

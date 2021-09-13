@@ -31,6 +31,7 @@ const routes: Routes = [
   {path: 'contratos', redirectTo: 'contratos/lista'},
   {path: 'contratos', component: ContratosComponent,
    children: [
+     {path: 'vendedor/:id', component: ContratosListaComponent},
      {path: 'cliente/:id', component: ContratosListaComponent},
      {path: 'detalhes', component: ContratosDetalhesComponent},
      {path: 'lista', component: ContratosListaComponent}

@@ -1,3 +1,42 @@
-<p>
-  vendedores-detalhes works!
-</p>
+<form [formGroup]="form">
+  <div class="p-3">
+    <div class="form-row">
+      <div class="form-group col-md-10">
+        <label>Nome</label>
+        <input type="text" class="form-control" placeholder="Nome"
+        [ngClass]="{'is-invalid': f.nome.errors && f.nome.touched}"
+        formControlName="nome">
+        <div *ngIf="f.nome.errors?.required" class="invalid-feedback">
+          Nome é obrigatório
+        </div>
+      </div>
+      <div class="form-group col-md-5">
+        <label>Código</label>
+        <input type="text" class="form-control" placeholder="Código - apenas números"
+        [ngClass]="{'is-invalid': f.codigo.errors && f.codigo.touched}"
+        formControlName="codigo">
+        <div *ngIf="f.codigo.errors?.required" class="invalid-feedback">
+          Código é obrigatório
+        </div>
+        <div *ngIf="f.codigo.errors?.maxlength || f.codigo.errors?.minlength" class="invalid-feedback">
+          Código deve ter 5 digitos
+        </div>
+        <div *ngIf="f.cpf.errors?.pattern" class="invalid-feedback">
+          Código formado apenas por números
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card-footer">
+    <div class="d-flex">
+      <a routerLink="/vendedores/lista" class="mr-auto">
+        <button class="btn btn-outline-secondary border">
+        Cancelar
+        </button>
+      </a>
+      <button class="btn btn-success">
+        Salvar
+      </button>
+    </div>
+  </div>
+</form>

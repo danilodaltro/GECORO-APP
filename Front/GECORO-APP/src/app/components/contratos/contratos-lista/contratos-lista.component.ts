@@ -28,14 +28,22 @@ export class ContratosListaComponent implements OnInit {
 
   ngOnInit() {
     this.spinner.show();
-    if(this.router.url.includes("cliente")){
-      const clienteId = this.activeRoute.snapshot.paramMap.get("id");
-      if(clienteId != null){
-        this.getContratosByCliente(+clienteId);
+    const rota: string = this.router.url;
+    if(rota.includes("lista")){
+      this.getContratos();
+    }
+    else{
+      const id = this.activeRoute.snapshot.paramMap.get("id");
+
+      if(id != null){
+        if(rota.includes("cliente")){
+          this.getContratosByCliente(+id);
+        }
+        else if(rota.includes("vendedor")){
+          this.getContratosByVendedor(+id);
+        }
       }
     }
-    else this.getContratos();
-    this.spinner.hide();
   }
 
   public get filtroLista(): string{
@@ -52,6 +60,20 @@ export class ContratosListaComponent implements OnInit {
       return this.contratos.filter(
         (contrato: any) => contrato.nuContrato.indexOf(filtrarPor) !== -1
       );
+  }
+
+  private getContratosByVendedor(id: number): void{
+    this.contratoService.getContratosByVendedor(id).subscribe(
+      (contratos: Contrato[]) =>
+      {
+        this.contratosFiltrados = contratos;
+      },
+      (error: any) =>
+      {
+        console.log(error);
+        this.toastr.error(error,"Erro!");
+      }
+    ).add(() => this.spinner.hide());
   }
 
   private getContratosByCliente(id: number): void{
