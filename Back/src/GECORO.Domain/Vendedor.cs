@@ -11,7 +11,7 @@ namespace GECORO.Domain
         public string Codigo {get; set;}
         [Required(ErrorMessage = "O nome do vendedor é uma informação obrigatória.")]
         public string Nome {get; set;}
-        public IEnumerable<VendedoresClientes> VendedoresClientes {get; set;}
+        public IEnumerable<Cliente> Clientes {get; set;}
         public RegraVendedor RegraVendedor {get; set;}
     }
 }

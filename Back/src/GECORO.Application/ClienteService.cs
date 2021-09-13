@@ -31,14 +31,7 @@ namespace GECORO.Application
                 {
                     var clienteRetorno = await clientePersist.GetClienteByIdAsync(cliente.Id);
 
-                        generalPersist.Add<VendedoresClientes>(new VendedoresClientes
-                        {
-                            ClienteId = clienteRetorno.Id,
-                            VendedorId = clienteRetorno.VendedorId
-                        });
-
-                        await generalPersist.SaveChangesAsync();
-                        return mapper.Map<ClienteDto>(clienteRetorno);
+                    return mapper.Map<ClienteDto>(clienteRetorno);
                 }
 
                 return null;

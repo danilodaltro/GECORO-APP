@@ -22,7 +22,7 @@ namespace GECORO.Persistence
                                         .Include(v => v.RegraVendedor);
 
             if (incluiClientes)
-                query.Include(v => v.VendedoresClientes).ThenInclude(vc => vc.Cliente);
+                query.Include(v => v.Clientes);
 
             query = query.OrderBy(v => v.Id);
 
@@ -35,7 +35,7 @@ namespace GECORO.Persistence
                             .Include(v => v.RegraVendedor);
 
             if (incluiClientes)
-                query.Include(v => v.VendedoresClientes).ThenInclude(vc => vc.Cliente);
+                query.Include(v => v.Clientes);
 
             query = query.OrderBy(v => v.Id).Where(v => v.Nome.ToLower().Contains(nome.ToLower()));
 
@@ -48,7 +48,7 @@ namespace GECORO.Persistence
                             .Include(v => v.RegraVendedor);
 
             if (incluiClientes)
-                query.Include(v => v.VendedoresClientes).ThenInclude(vc => vc.Cliente);
+                query.Include(v => v.Clientes);
 
             query = query.OrderBy(v => v.Id).Where(v => v.Codigo == codigo);
 
@@ -61,7 +61,7 @@ namespace GECORO.Persistence
                 .Include(v => v.RegraVendedor);
 
             if (incluiClientes)
-                query.Include(v => v.VendedoresClientes).ThenInclude(vc => vc.Cliente);
+                query.Include(v => v.Clientes);
 
             query = query.OrderBy(v => v.Id).Where(v => v.Id == id);
 

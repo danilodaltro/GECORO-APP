@@ -20,7 +20,7 @@ namespace GECORO.API.Controllers
         }
 
         [HttpGet("contrato/{numero}")]
-        public async Task<IActionResult> GetByNumero(string numeroContrato)
+        public async Task<IActionResult> GetByNumeroContrato(string numeroContrato)
         {
             try
             {

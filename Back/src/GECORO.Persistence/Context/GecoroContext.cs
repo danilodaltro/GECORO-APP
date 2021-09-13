@@ -14,7 +14,6 @@ namespace GECORO.Persistence.Context
         public DbSet<Cliente> Clientes { get; set; }
         public DbSet<Contrato> Contratos { get; set; }
         public DbSet<Parcela> Parcelas { get; set; }
-        public DbSet<VendedoresClientes> VendedoresClientes {get; set;}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -28,22 +27,14 @@ namespace GECORO.Persistence.Context
             modelBuilder.Entity<Cliente>()
             .HasAlternateKey(c => c.CPF);
 
-            modelBuilder.Entity<VendedoresClientes>()
-            .HasKey(vc => vc.ClienteId);
-
             modelBuilder.Entity<Vendedor>()
-            .HasMany(v => v.VendedoresClientes)
-            .WithOne(vc => vc.Vendedor)
-            .OnDelete(DeleteBehavior.Cascade);
+            .HasMany(v => v.Clientes)
+            .WithOne(c => c.Vendedor)
+            .OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<Vendedor>()
             .HasOne(v => v.RegraVendedor)
             .WithOne(rv => rv.Vendedor)
-            .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<Cliente>()
-            .HasOne(c => c.VendedoresClientes)
-            .WithOne(vc => vc.Cliente)
             .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Cliente>()

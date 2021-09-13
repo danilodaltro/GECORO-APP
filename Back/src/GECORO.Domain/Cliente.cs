@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GECORO.Domain
 {
@@ -15,7 +16,8 @@ namespace GECORO.Domain
         public string Nome {get; set;}
         
         public IEnumerable<Contrato> Contratos {get; set;}
-        public int VendedorId {get; set;}
-        public VendedoresClientes VendedoresClientes {get; set;}
+        [ForeignKey("Vendedor_Id")]
+        public int? VendedorId {get; set;}
+        public Vendedor Vendedor {get; set;}
     }
 }

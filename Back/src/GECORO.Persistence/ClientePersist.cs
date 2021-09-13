@@ -20,8 +20,7 @@ namespace GECORO.Persistence
         {
             IQueryable<Cliente> query = context.Clientes
                                         .Include(c => c.Contratos)
-                                        .Include(c => c.VendedoresClientes)
-                                        .ThenInclude(vc => vc.Vendedor);
+                                        .Include(vc => vc.Vendedor);
 
             query = query.OrderBy(c => c.Id);
 
@@ -32,8 +31,7 @@ namespace GECORO.Persistence
         {
             IQueryable<Cliente> query = context.Clientes
                                         .Include(c => c.Contratos)
-                                        .Include(c => c.VendedoresClientes)
-                                        .ThenInclude(vc => vc.Vendedor);
+                                        .Include(vc => vc.Vendedor);
 
             query = query.OrderBy(c => c.Id).Where(c => c.CPF == CPF);
 
@@ -44,8 +42,7 @@ namespace GECORO.Persistence
         {
             IQueryable<Cliente> query = context.Clientes
                                         .Include(c => c.Contratos)
-                                        .Include(c => c.VendedoresClientes)
-                                        .ThenInclude(vc => vc.Vendedor);
+                                        .Include(vc => vc.Vendedor);
 
             query = query.OrderBy(c => c.Id).Where(c => c.Id == id);
 
@@ -56,8 +53,7 @@ namespace GECORO.Persistence
         {
             IQueryable<Cliente> query = context.Clientes
                                                 .Include(c => c.Contratos)
-                                                .Include(c => c.VendedoresClientes)
-                                                .ThenInclude(vc => vc.Vendedor);
+                                                .Include(vc => vc.Vendedor);
 
             query = query.OrderBy(c => c.Id).Where(c => c.Nome.ToLower().Contains(nome.ToLower()));
 

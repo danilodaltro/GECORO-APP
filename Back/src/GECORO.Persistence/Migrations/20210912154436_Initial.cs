@@ -7,22 +7,6 @@ namespace GECORO.Persistence.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Clientes",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    CPF = table.Column<string>(type: "TEXT", maxLength: 11, nullable: false),
-                    Nome = table.Column<string>(type: "TEXT", nullable: false),
-                    VendedorId = table.Column<int>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Clientes", x => x.Id);
-                    table.UniqueConstraint("AK_Clientes_CPF", x => x.CPF);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Vendedores",
                 columns: table => new
                 {
@@ -35,6 +19,49 @@ namespace GECORO.Persistence.Migrations
                 {
                     table.PrimaryKey("PK_Vendedores", x => x.Id);
                     table.UniqueConstraint("AK_Vendedores_Codigo", x => x.Codigo);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Clientes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    CPF = table.Column<string>(type: "TEXT", maxLength: 11, nullable: false),
+                    Nome = table.Column<string>(type: "TEXT", nullable: false),
+                    VendedorId = table.Column<int>(type: "INTEGER", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Clientes", x => x.Id);
+                    table.UniqueConstraint("AK_Clientes_CPF", x => x.CPF);
+                    table.ForeignKey(
+                        name: "FK_Clientes_Vendedores_VendedorId",
+                        column: x => x.VendedorId,
+                        principalTable: "Vendedores",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RegraVendedor",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    VendedorId = table.Column<int>(type: "INTEGER", nullable: false),
+                    SaldoDevedor = table.Column<decimal>(type: "TEXT", nullable: false),
+                    ParcelasPagas = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RegraVendedor", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RegraVendedor_Vendedores_VendedorId",
+                        column: x => x.VendedorId,
+                        principalTable: "Vendedores",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -60,51 +87,6 @@ namespace GECORO.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RegraVendedor",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    VendedorId = table.Column<int>(type: "INTEGER", nullable: false),
-                    SaldoDevedor = table.Column<decimal>(type: "TEXT", nullable: false),
-                    ParcelasPagas = table.Column<int>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_RegraVendedor", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_RegraVendedor_Vendedores_VendedorId",
-                        column: x => x.VendedorId,
-                        principalTable: "Vendedores",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "VendedoresClientes",
-                columns: table => new
-                {
-                    ClienteId = table.Column<int>(type: "INTEGER", nullable: false),
-                    VendedorId = table.Column<int>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_VendedoresClientes", x => x.ClienteId);
-                    table.ForeignKey(
-                        name: "FK_VendedoresClientes_Clientes_ClienteId",
-                        column: x => x.ClienteId,
-                        principalTable: "Clientes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_VendedoresClientes_Vendedores_VendedorId",
-                        column: x => x.VendedorId,
-                        principalTable: "Vendedores",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Parcelas",
                 columns: table => new
                 {
@@ -126,6 +108,11 @@ namespace GECORO.Persistence.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Clientes_VendedorId",
+                table: "Clientes",
+                column: "VendedorId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Contratos_ClienteId",
                 table: "Contratos",
                 column: "ClienteId");
@@ -140,11 +127,6 @@ namespace GECORO.Persistence.Migrations
                 table: "RegraVendedor",
                 column: "VendedorId",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_VendedoresClientes_VendedorId",
-                table: "VendedoresClientes",
-                column: "VendedorId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -156,16 +138,13 @@ namespace GECORO.Persistence.Migrations
                 name: "RegraVendedor");
 
             migrationBuilder.DropTable(
-                name: "VendedoresClientes");
-
-            migrationBuilder.DropTable(
                 name: "Contratos");
 
             migrationBuilder.DropTable(
-                name: "Vendedores");
+                name: "Clientes");
 
             migrationBuilder.DropTable(
-                name: "Clientes");
+                name: "Vendedores");
         }
     }
 }
