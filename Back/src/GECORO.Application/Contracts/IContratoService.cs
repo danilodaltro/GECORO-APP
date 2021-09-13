@@ -13,5 +13,6 @@ namespace GECORO.Application.Contracts
         Task<ContratoDto[]> GetAllContratosByClienteAsync(int clienteId);
         Task<ContratoDto[]> GetAllContratosByVendedorAsync(int vendedorId);
         Task<ContratoDto> GetContratoByIdAsync(int contratoId);
+        public Task<bool> ProcessaContratoViaPlanilha(string caminhoArquivo);
     }
 }

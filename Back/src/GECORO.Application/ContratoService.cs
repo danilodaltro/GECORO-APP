@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using ClosedXML.Excel;
 using GECORO.Application.Contracts;
 using GECORO.Application.Dto;
 using GECORO.Domain;
@@ -13,11 +16,19 @@ namespace GECORO.Application
         private readonly IGeneralPersist generalPersist;
         private readonly IContratoPersist contratoPersist;
         private readonly IMapper mapper;
-        public ContratoService(IGeneralPersist generalPersist, IContratoPersist contratoPersist, IMapper mapper)
+        private readonly IClientePersist clientePersist;
+        private readonly IVendedorPersist vendedorPersist;
+        public ContratoService(IGeneralPersist generalPersist, 
+                                IContratoPersist contratoPersist, 
+                                IMapper mapper,
+                                IClientePersist clientePersist,
+                                IVendedorPersist vendedorPersist)
         {
             this.generalPersist = generalPersist;
             this.contratoPersist = contratoPersist;
             this.mapper = mapper;
+            this.clientePersist = clientePersist;
+            this.vendedorPersist = vendedorPersist;
         }
 
         public async Task<ContratoDto> AddContrato(ContratoDto model)
@@ -140,6 +151,63 @@ namespace GECORO.Application
             {
                 throw new Exception(ex.Message);
             }
+        }
+
+        public async  Task<bool> ProcessaContratoViaPlanilha(string caminhoArquivo){
+                        try{
+                if(string.IsNullOrEmpty(caminhoArquivo))
+                return false;
+
+            var xls = new XLWorkbook(caminhoArquivo);
+            if (xls != null)
+            {
+                var planilha = xls.Worksheets.First(w => w.Name == "Planilha1");
+                int totalContratos = planilha.Rows().Count();
+                List<Parcela> listParcelas = new List<Parcela>();
+                for (int i = 2; i < totalContratos; i++)
+                {
+                    Contrato contrato = new Contrato();
+
+                    int parcelasTotais = Convert.ToInt32(planilha.Row(i).Cell(4).ToString()),
+                        parcelasPagas = Convert.ToInt32(planilha.Row(i).Cell(5).ToString());
+
+                    decimal valorParcelas = Convert.ToDecimal(planilha.Row(i).Cell(6).ToString());
+
+                    contrato.NuContrato = planilha.Row(i).Cell(1).ToString();
+                    contrato.ValorTotal = Convert.ToDecimal(planilha.Row(i).Cell(2).ToString());
+                    contrato.SaldoDevedor = Convert.ToDecimal(planilha.Row(i).Cell(3).ToString());
+
+                    
+                    var cliente = await this.clientePersist
+                                        .GetClienteByCPFAsync(planilha.Row(i).Cell(7).ToString());
+                    contrato.ClienteId = cliente.Id;
+                               
+                    var vendedor = await vendedorPersist
+                                        .GetVendedorByRegraAsync(parcelasPagas,contrato.SaldoDevedor);
+
+                    contrato.VendedorId = vendedor.Id;
+
+                    for (int j = 1; j <= parcelasTotais; j++)
+                    {
+                        Parcela parcela = new Parcela();
+                        parcela.NuParcela = j;
+                        parcela.Valor = valorParcelas;
+                        if (j <= parcelasPagas)
+                            parcela.StParcela = SituacaoParcela.Paga;
+                        else
+                            parcela.StParcela = SituacaoParcela.Aberta;
+
+                        listParcelas.Add(parcela);
+                    }
+                    contrato.Parcelas = listParcelas;
+                    generalPersist.Add(contrato);
+                }
+            }
+            return true;
+            }
+            catch(Exception ex){
+                throw new Exception($"Erro ao processar contratos via planilha. Erro: {ex.Message}");
+            }  
         }
     }
 }

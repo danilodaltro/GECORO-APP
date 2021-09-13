@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using GECORO.Application.Contracts;
 using GECORO.Application.Dto;
-using GECORO.Application.UseCases;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,15 +15,12 @@ namespace GECORO.API.Controllers
     public class ContratoController : ControllerBase
     {
         private readonly IContratoService contratoService;
-        private readonly IProcessamentoContratosService processamentoContratosService;
         private readonly IWebHostEnvironment webHostEnvironment;
         public ContratoController(IContratoService contratoService,
-                                IProcessamentoContratosService processamentoContratosService,
                                 IWebHostEnvironment webHostEnvironment)
         {
             this.webHostEnvironment = webHostEnvironment;
             this.contratoService = contratoService;
-            this.processamentoContratosService = processamentoContratosService;
         }
 
         [HttpGet]
@@ -122,7 +118,7 @@ namespace GECORO.API.Controllers
                 if (file.Length > 0)
                 {
                     string path = SaveFile(file).Result;
-                    if (processamentoContratosService.ProcessarContratos(path))
+                    if (contratoService.ProcessaContratoViaPlanilha(path).Result)
                     {
                         if (System.IO.File.Exists(path))
                             System.IO.File.Delete(path);
