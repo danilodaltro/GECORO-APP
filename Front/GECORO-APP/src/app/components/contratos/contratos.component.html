@@ -1,0 +1,56 @@
+<app-titulo [titulo]="'Contratos'"
+            [iconClass]="'fas fa-file-contract'"
+            [botaoListar]="true"
+            [bgColor] = "'warning'">
+          </app-titulo>
+
+<div class="form-inline">
+  <div class="form-group mb-2 col-md-6">
+    <label class="me-2 col-form-label">Filtro:</label>
+    <!-- <input type="text" class="form-control" placeholder="buscar" [(ngModel)]="filtroLista"> -->
+  </div>
+</div>
+
+<table class="table table-striped">
+  <thead class="table-dark">
+  <tr>
+      <th>Número</th>
+      <th>Nº de parcelas</th>
+      <th>Valor total</th>
+      <th>Saldo devedor</th>
+      <th>Opções</th>
+  </tr>
+  </thead>
+  <tbody >
+    <tr *ngFor="let contrato of contratosFiltrados">
+      <td>{{contrato.nuContrato}}</td>
+      <td>{{contrato.parcelas.length}}</td>
+      <td>{{contrato.valorTotal | currency:'BRL':true:'1.2-2'}}</td>
+      <td>{{contrato.saldoDevedor | currency:'BRL':true:'1.2-2'}}</td>
+      <td>
+        <button type="button" class="btn btn-primary btn-sm me-2" tooltip="Editar">
+          <i class="fa fa-edit"></i>
+        </button>
+        <button type="button" class="btn btn-danger btn-sm" tooltip="Excluir" (click)="openModal(template)">
+          <i class="fa fa-trash"></i>
+        </button>
+      </td>
+    </tr>
+  </tbody>
+  <tfoot *ngIf="!contratos.length">
+    <tr>
+      <td colspan="8" class="text-center">
+        <h4>Nenhum contrato encontrado!</h4>
+      </td>
+    </tr>
+</table>
+
+<!-- eventos | json -->
+
+<ng-template #template>
+  <div class="modal-body text-center">
+    <p>Tem certeza que quer deletar este cliente?</p>
+    <button type="button" class="btn btn-default" (click)="confirm()" >Sim</button>
+    <button type="button" class="btn btn-primary" (click)="decline()" >Não</button>
+  </div>
+</ng-template>

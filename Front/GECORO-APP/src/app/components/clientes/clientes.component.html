@@ -1,0 +1,60 @@
+<app-titulo [titulo]="'Clientes'"
+            [iconClass]="'fa fa-users'"
+            [botaoListar]="true"
+            [bgColor] = "'primary'">
+          </app-titulo>
+
+<div class="form-inline">
+  <div class="form-group mb-2 col-md-6">
+    <label class="me-2 col-form-label">Filtro:</label>
+    <!-- <input type="text" class="form-control" placeholder="buscar" [(ngModel)]="filtroLista"> -->
+  </div>
+</div>
+
+<table class="table table-striped">
+  <thead class="table-dark">
+  <tr>
+      <th>Nome</th>
+      <th>CPF</th>
+      <th>Vendedor</th>
+      <th>Contratos</th>
+      <th>Opções</th>
+  </tr>
+  </thead>
+  <tbody >
+    <tr *ngFor="let cliente of clientesFiltrados">
+      <td>{{cliente.nome}}</td>
+      <td>{{cliente.cpf | cpfPipe}}</td>
+      <td>{{cliente.vendedor.nome}}</td>
+      <td>{{cliente.contratos}}</td>
+      <td>
+        <button type="button" class="btn btn-primary btn-sm me-2" tooltip="Editar">
+          <i class="fa fa-edit"></i>
+        </button>
+        <button type="button" class="btn btn-danger btn-sm" tooltip="Excluir" (click)="openModal(template)">
+          <i class="fa fa-trash"></i>
+        </button>
+      </td>
+    </tr>
+  </tbody>
+  <tfoot *ngIf="!clientes.length">
+    <tr>
+      <td colspan="8" class="text-center">
+        <h4>Nenhum evento encontrado!</h4>
+      </td>
+    </tr>
+</table>
+
+<!-- eventos | json -->
+
+<ng-template #template>
+  <div class="modal-body text-center">
+    <p>Tem certeza que quer deletar este cliente?</p>
+    <button type="button" class="btn btn-default" (click)="confirm()" >Sim</button>
+    <button type="button" class="btn btn-primary" (click)="decline()" >Não</button>
+  </div>
+</ng-template>
+
+<!-- <ng-template>
+  <app-contratos [idCliente]="{{idCliente}}"></app-contratos>
+</ng-template> -->
