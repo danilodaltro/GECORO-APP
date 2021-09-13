@@ -1,0 +1,69 @@
+<div class="card rounded shadow-sm p-3">
+  <div class="d-flex">
+    <div class="flex-fill pe-3">
+      <div class="input-group mb-2">
+        <div class="input-group-prepend">
+          <div class="input-group-btn me-3 mt-1">
+            <button class="btn btn-outline-dark btn-sm" (click)="alternarBtn()">
+            {{nomeBtnFiltro}}:
+          </button></div>
+        </div>
+        <input type="text" class="form-control" placeholder="buscar" [(ngModel)]="filtroLista">
+      </div>
+    </div>
+
+    <div>
+      <a class="d-flex btn btn-outline-primary" routerLink="/eventos/detalhe">
+        <i class="fa fa-plus-circle my-1"></i>
+        <b class="ms-1 d-none d-sm-block">Novo</b>
+      </a>
+    </div>
+  </div>
+  <table class="table table-striped">
+      <thead class="table-dark">
+      <tr>
+          <th>Nome</th>
+          <th>CPF</th>
+          <th>Vendedor</th>
+          <th>Contratos</th>
+          <th>Opções</th>
+      </tr>
+      </thead>
+      <tbody >
+        <tr *ngFor="let cliente of clientesFiltrados">
+          <td>{{cliente.nome}}</td>
+          <td>{{cliente.cpf | cpfPipe}}</td>
+          <td>{{cliente.vendedor.nome}}</td>
+          <td><a routerLink="/contratos/cliente/{{cliente.id}}">Contratos</a></td>
+          <td>
+            <button type="button" class="btn btn-primary btn-sm me-2" tooltip="Editar">
+              <i class="fa fa-edit"></i>
+            </button>
+            <button type="button" class="btn btn-danger btn-sm" tooltip="Excluir" (click)="openModal(template)">
+              <i class="fa fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+      <tfoot *ngIf="!clientes.length && !clientesFiltrados.length">
+        <tr>
+          <td colspan="8" class="text-center">
+            <h4>Nenhum cliente encontrado!</h4>
+          </td>
+        </tr>
+  </table>
+</div>
+
+<!-- eventos | json -->
+
+<ng-template #template>
+  <div class="modal-body text-center">
+    <p>Tem certeza que quer deletar este cliente?</p>
+    <button type="button" class="btn btn-default" (click)="confirm()" >Sim</button>
+    <button type="button" class="btn btn-primary" (click)="decline()" >Não</button>
+  </div>
+</ng-template>
+
+<!-- <ng-template>
+  <app-contratos [idCliente]="{{idCliente}}"></app-contratos>
+</ng-template> -->

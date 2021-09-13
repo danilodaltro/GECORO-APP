@@ -10,6 +10,6 @@ export interface Parcela {
 }
 
 export enum SituacaoParcela {
-  Paga = 'P',
-  Aberta = 'A'
+  P = 0,
+  A = 1
 }

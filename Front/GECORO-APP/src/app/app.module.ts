@@ -27,6 +27,14 @@ import { VendedorService } from './services/vendedor.service';
 import { ParcelaService } from './services/parcela.service';
 import { registerLocaleData } from '@angular/common';
 import ptBr from '@angular/common/locales/pt';
+import { ContratosDetalhesComponent } from './components/contratos/contratos-detalhes/contratos-detalhes.component';
+import { ContratosListaComponent } from './components/contratos/contratos-lista/contratos-lista.component';
+import { ClientesDetalhesComponent } from './components/clientes/clientes-detalhes/clientes-detalhes.component';
+import { ClientesListaComponent } from './components/clientes/clientes-lista/clientes-lista.component';
+import { VendedoresDetalhesComponent } from './components/vendedores/vendedores-detalhes/vendedores-detalhes.component';
+import { VendedoresListaComponent } from './components/vendedores/vendedores-lista/vendedores-lista.component';
+import { ParcelasListaComponent } from './components/parcelas/parcelas-lista/parcelas-lista.component';
+import { ParcelasDetalhesComponent } from './components/parcelas/parcelas-detalhes/parcelas-detalhes.component';
 
 registerLocaleData(ptBr);
 
@@ -34,12 +42,21 @@ registerLocaleData(ptBr);
   declarations: [
     AppComponent,
     VendedoresComponent,
+    VendedoresDetalhesComponent,
+    VendedoresListaComponent,
     ClientesComponent,
+    ClientesDetalhesComponent,
+    ClientesListaComponent,
     ContratosComponent,
+    ContratosDetalhesComponent,
+    ContratosListaComponent,
     ParcelasComponent,
+    ParcelasListaComponent,
+    ParcelasDetalhesComponent,
     NavComponent,
     TituloComponent,
-    CpfPipePipe
+    CpfPipePipe,
+
   ],
   imports: [
     BrowserModule,

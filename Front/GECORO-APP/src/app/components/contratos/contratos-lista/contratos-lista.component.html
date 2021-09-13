@@ -1,0 +1,66 @@
+<div class="card rounded shadow-sm p-3">
+  <div class="d-flex">
+    <div class="flex-fill pe-3">
+      <div class="input-group mb-2">
+        <div class="input-group-prepend">
+          <div class="input-group-btn me-3 mt-1">
+          <div class="btn-dark btn-sm" style="cursor: text;">NÚMERO:</div>
+        </div>
+        </div>
+        <input type="text" class="form-control" placeholder="buscar" [(ngModel)]="filtroLista">
+      </div>
+    </div>
+
+    <div>
+      <a class="d-flex btn btn-outline-primary" routerLink="/eventos/detalhe">
+        <i class="fa fa-plus-circle my-1"></i>
+        <b class="ms-1 d-none d-sm-block">Novo</b>
+      </a>
+    </div>
+  </div>
+  <table class="table table-striped">
+      <thead class="table-dark">
+      <tr>
+          <th>Número</th>
+          <th>Nº de parcelas</th>
+          <th>Cliente</th>
+          <th>Valor total</th>
+          <th>Saldo devedor</th>
+          <th>Opções</th>
+      </tr>
+      </thead>
+      <tbody >
+        <tr *ngFor="let contrato of contratosFiltrados">
+          <td>{{contrato.nuContrato}}</td>
+          <td><a routerLink="/parcelas/contrato/{{contrato.id}}">{{contrato.parcelas.length}}</a></td>
+          <td><a routerLink="/cliente/detalhes/{{contrato.cliente.id}}">{{contrato.cliente.nome}}</a></td>
+          <td>{{contrato.valorTotal | currency:'BRL':true:'1.2-2'}}</td>
+          <td>{{contrato.saldoDevedor | currency:'BRL':true:'1.2-2'}}</td>
+          <td>
+            <button type="button" class="btn btn-primary btn-sm me-2" tooltip="Editar">
+              <i class="fa fa-edit"></i>
+            </button>
+            <button type="button" class="btn btn-danger btn-sm" tooltip="Excluir" (click)="openModal(template)">
+              <i class="fa fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+      <tfoot *ngIf="!contratosFiltrados.length">
+        <tr>
+          <td colspan="8" class="text-center">
+            <h4>Nenhum contrato encontrado!</h4>
+          </td>
+        </tr>
+    </table>
+</div>
+
+<!-- eventos | json -->
+
+<ng-template #template>
+  <div class="modal-body text-center">
+    <p>Tem certeza que quer deletar este cliente?</p>
+    <button type="button" class="btn btn-default" (click)="confirm()" >Sim</button>
+    <button type="button" class="btn btn-primary" (click)="decline()" >Não</button>
+  </div>
+</ng-template>
