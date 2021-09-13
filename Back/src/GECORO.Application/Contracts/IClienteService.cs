@@ -10,8 +10,7 @@ namespace GECORO.Application.Contracts
         public Task<ClienteDto> UpdateCliente(int clienteId, ClienteDto model);
         public Task<bool> DeleteCliente(int clienteId); 
         Task<ClienteDto[]> GetAllClientesAsync();
-        Task<ClienteDto[]> GetAllClientesByNomeAsync(string nome);
-        Task<ClienteDto> GetClienteByCPFAsync(string CPF);
+        Task<ClienteDto[]> GetAllClientesByVendedorAsync(int vendedorId);
         Task<ClienteDto> GetClienteByIdAsync(int clienteId);
     }
 }

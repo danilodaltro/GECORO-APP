@@ -19,15 +19,12 @@ namespace GECORO.API.Controllers
             this.contratoService = contratoService;
         }
 
-        [HttpGet("contrato/{numero}")]
-        public async Task<IActionResult> GetByNumeroContrato(string numeroContrato)
+        [HttpGet("contrato/{id}")]
+        public async Task<IActionResult> GetByNumeroContrato(int id)
         {
             try
             {
-                var contrato = await contratoService.GetContratoByNumeroAsync(numeroContrato);
-                if (contrato == null) return NoContent();
-
-                var parcelas = await parcelaService.GetAllParcelasByContratoAsync(contrato.Id);
+                var parcelas = await parcelaService.GetAllParcelasByContratoAsync(id);
                 if (parcelas == null) return NoContent();
 
                 return Ok(parcelas);

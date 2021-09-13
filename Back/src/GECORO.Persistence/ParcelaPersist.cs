@@ -13,11 +13,12 @@ namespace GECORO.Persistence
         public ParcelaPersist(GecoroContext context)
         {
             this.context = context;
+            this.context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
         }
 
         public async Task<Parcela> GetParcelaByIdAsync(int id)
         {
-            IQueryable<Parcela> query = context.Parcelas;
+            IQueryable<Parcela> query = context.Parcelas.Include(p => p.Contrato);
 
             query = query.OrderBy(c => c.Id).Where(p => p.Id == id);
 
@@ -26,7 +27,7 @@ namespace GECORO.Persistence
 
         public async Task<Parcela[]> GetAllParcelasByContratoAsync(int contratoId)
         {
-            IQueryable<Parcela> query = context.Parcelas;
+            IQueryable<Parcela> query = context.Parcelas.Include(p => p.Contrato);
 
             query = query.OrderBy(c => c.Id).Where(p => p.ContratoId == contratoId);
 

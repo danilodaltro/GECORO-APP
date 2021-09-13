@@ -6,8 +6,7 @@ namespace GECORO.Persistence.Contracts
     public interface IClientePersist
     {
         Task<Cliente[]> GetAllClientesAsync();
-        Task<Cliente[]> GetClientesByNomeAsync(string nome);
-        Task<Cliente> GetClienteByCPFAsync(string CPF);
+        Task<Cliente[]> GetAllClientesByVendedor(int vendedorId);
         Task<Cliente> GetClienteByIdAsync(int id);
     }
 }

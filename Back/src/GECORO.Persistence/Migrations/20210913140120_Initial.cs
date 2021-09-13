@@ -73,7 +73,8 @@ namespace GECORO.Persistence.Migrations
                     ClienteId = table.Column<int>(type: "INTEGER", nullable: false),
                     NuContrato = table.Column<string>(type: "TEXT", maxLength: 10, nullable: false),
                     SaldoDevedor = table.Column<decimal>(type: "TEXT", nullable: false),
-                    ValorTotal = table.Column<decimal>(type: "TEXT", nullable: false)
+                    ValorTotal = table.Column<decimal>(type: "TEXT", nullable: false),
+                    VendedorId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -84,6 +85,12 @@ namespace GECORO.Persistence.Migrations
                         column: x => x.ClienteId,
                         principalTable: "Clientes",
                         principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Contratos_Vendedores_VendedorId",
+                        column: x => x.VendedorId,
+                        principalTable: "Vendedores",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -116,6 +123,11 @@ namespace GECORO.Persistence.Migrations
                 name: "IX_Contratos_ClienteId",
                 table: "Contratos",
                 column: "ClienteId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Contratos_VendedorId",
+                table: "Contratos",
+                column: "VendedorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Parcelas_ContratoId",

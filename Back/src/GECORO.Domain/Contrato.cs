@@ -20,5 +20,7 @@ namespace GECORO.Domain
         public decimal SaldoDevedor {get; set;}
         [Required(ErrorMessage = "O valor total do contrato é uma informação obrigatória.")]
         public decimal ValorTotal {get; set;}
+        public int? VendedorId {get; set;}
+        public Vendedor Vendedor {get; set;}
     }
 }

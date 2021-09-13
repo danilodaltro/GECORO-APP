@@ -34,12 +34,12 @@ namespace GECORO.API.Controllers
             }
         }
 
-        [HttpGet("numero/{numero}")]
-        public async Task<IActionResult> GetByNumero(string numero)
+        [HttpGet("vendedor/{id}")]
+        public async Task<IActionResult> GetByVendedor(int id)
         {
             try
             {
-                var contratos = await contratoService.GetContratoByNumeroAsync(numero);
+                var contratos = await contratoService.GetAllContratosByVendedorAsync(id);
                 if (contratos == null) return NoContent();
 
                 return Ok(contratos);
@@ -47,7 +47,7 @@ namespace GECORO.API.Controllers
             catch (Exception ex)
             {
                 return this.StatusCode(StatusCodes.Status500InternalServerError,
-                $"Erro ao tentar recuperar contrato. Erro: {ex.Message}");
+                $"Erro ao tentar recuperar contratos. Erro: {ex.Message}");
             }
         }
 

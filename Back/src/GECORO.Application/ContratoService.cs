@@ -112,14 +112,14 @@ namespace GECORO.Application
             }
         }
 
-        public async Task<ContratoDto> GetContratoByNumeroAsync(string numeroContrato)
+        public async Task<ContratoDto[]> GetAllContratosByVendedorAsync(int vendedorId)
         {
             try
             {
-                var contrato = await contratoPersist.GetContratoByNumeroAsync(numeroContrato);
+                var contrato = await contratoPersist.GetAllContratosByVendedorAsync(vendedorId);
                 if (contrato == null) return null;
 
-                return mapper.Map<ContratoDto>(contrato);
+                return mapper.Map<ContratoDto[]>(contrato);
             }
             catch (Exception ex)
             {

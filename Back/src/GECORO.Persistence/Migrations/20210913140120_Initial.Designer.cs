@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GECORO.Persistence.Migrations
 {
     [DbContext(typeof(GecoroContext))]
-    [Migration("20210912154436_Initial")]
+    [Migration("20210913140120_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -65,11 +65,16 @@ namespace GECORO.Persistence.Migrations
                     b.Property<decimal>("ValorTotal")
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("VendedorId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
                     b.HasAlternateKey("NuContrato");
 
                     b.HasIndex("ClienteId");
+
+                    b.HasIndex("VendedorId");
 
                     b.ToTable("Contratos");
                 });
@@ -162,6 +167,10 @@ namespace GECORO.Persistence.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
+                    b.HasOne("GECORO.Domain.Vendedor", null)
+                        .WithMany("Contratos")
+                        .HasForeignKey("VendedorId");
+
                     b.Navigation("Cliente");
                 });
 
@@ -200,6 +209,8 @@ namespace GECORO.Persistence.Migrations
             modelBuilder.Entity("GECORO.Domain.Vendedor", b =>
                 {
                     b.Navigation("Clientes");
+
+                    b.Navigation("Contratos");
 
                     b.Navigation("RegraVendedor");
                 });

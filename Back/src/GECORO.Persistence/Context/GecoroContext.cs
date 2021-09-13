@@ -50,12 +50,16 @@ namespace GECORO.Persistence.Context
             modelBuilder.Entity<Contrato>()
             .HasOne(ct => ct.Cliente)
             .WithMany(c => c.Contratos)
-            .OnDelete(DeleteBehavior.NoAction);
+            .OnDelete(DeleteBehavior.NoAction);        
 
             modelBuilder.Entity<Parcela>()
             .HasOne(p => p.Contrato)
             .WithMany(ct => ct.Parcelas)
             .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Parcela>()
+            .Property(p => p.StParcela)
+            .HasConversion<int>();
         }
     }
 }

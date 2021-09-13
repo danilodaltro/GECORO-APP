@@ -98,30 +98,14 @@ namespace GECORO.Application
             }
         }
 
-        public async Task<ClienteDto[]> GetAllClientesByNomeAsync(string nome)
+        public async Task<ClienteDto[]> GetAllClientesByVendedorAsync(int vendedorId)
         {
             try
             {
-                var clientes = await clientePersist.GetClientesByNomeAsync(nome);
-                if (clientes == null) return null;
-
-                return mapper.Map<ClienteDto[]>(clientes);
-
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
-        public async Task<ClienteDto> GetClienteByCPFAsync(string CPF)
-        {
-            try
-            {
-                var cliente = await clientePersist.GetClienteByCPFAsync(CPF);
+                var cliente = await clientePersist.GetAllClientesByVendedor(vendedorId);
                 if (cliente == null) return null;
 
-                return mapper.Map<ClienteDto>(cliente);
+                return mapper.Map<ClienteDto[]>(cliente);
 
             }
             catch (Exception ex)
@@ -145,5 +129,6 @@ namespace GECORO.Application
                 throw new Exception(ex.Message);
             }
         }
+
     }
 }

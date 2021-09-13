@@ -4,8 +4,8 @@ namespace GECORO.Domain
 {
     public enum SituacaoParcela
     {
-        Paga = 'P',
-        Aberta = 'A'
+        Paga = 1,
+        Aberta = 0
     }
     
     public class Parcela

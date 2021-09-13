@@ -7,7 +7,7 @@ namespace GECORO.Persistence.Contracts
     {
         Task<Contrato[]> GetAllContratosAsync();
         Task<Contrato[]> GetAllContratosByClienteAsync(int clienteId);
-        Task<Contrato> GetContratoByNumeroAsync(string numeroContrato);
+        Task<Contrato[]> GetAllContratosByVendedorAsync(int vendedorId);
         Task<Contrato> GetContratoByIdAsync(int contratoId);
     }
 }

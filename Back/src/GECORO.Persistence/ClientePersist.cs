@@ -27,17 +27,18 @@ namespace GECORO.Persistence
             return await query.ToArrayAsync();
         }
 
-        public async Task<Cliente> GetClienteByCPFAsync(string CPF)
+      public async Task<Cliente[]> GetAllClientesByVendedor(int vendedorId)
         {
             IQueryable<Cliente> query = context.Clientes
-                                        .Include(c => c.Contratos)
-                                        .Include(vc => vc.Vendedor);
+                                    .Include(c => c.Contratos)
+                                    .Include(vc => vc.Vendedor);
 
-            query = query.OrderBy(c => c.Id).Where(c => c.CPF == CPF);
+            query = query.OrderBy(c => c.Id)
+                         .Where(c => c.VendedorId == vendedorId);
 
-            return await query.FirstOrDefaultAsync();
+            return await query.ToArrayAsync();
         }
-
+        
         public async Task<Cliente> GetClienteByIdAsync(int id)
         {
             IQueryable<Cliente> query = context.Clientes
@@ -47,17 +48,6 @@ namespace GECORO.Persistence
             query = query.OrderBy(c => c.Id).Where(c => c.Id == id);
 
             return await query.FirstOrDefaultAsync();
-        }
-
-        public async Task<Cliente[]> GetClientesByNomeAsync(string nome)
-        {
-            IQueryable<Cliente> query = context.Clientes
-                                                .Include(c => c.Contratos)
-                                                .Include(vc => vc.Vendedor);
-
-            query = query.OrderBy(c => c.Id).Where(c => c.Nome.ToLower().Contains(nome.ToLower()));
-
-            return await query.ToArrayAsync();
         }
     }
 }

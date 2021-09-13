@@ -13,10 +13,14 @@ namespace GECORO.Persistence
         public ContratoPersist(GecoroContext context)
         {
             this.context = context;
+            this.context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
         }
         public async Task<Contrato[]> GetAllContratosAsync()
         {
-            IQueryable<Contrato> query = context.Contratos.Include(ctr => ctr.Parcelas);
+            IQueryable<Contrato> query = context.Contratos
+                                                .Include(ctr => ctr.Parcelas)
+                                                .Include(ctr => ctr.Cliente)
+                                                .Include(ctr => ctr.Vendedor);
 
             query = query.OrderBy(ctr => ctr.Id);
 
@@ -25,25 +29,34 @@ namespace GECORO.Persistence
 
         public async Task<Contrato[]> GetAllContratosByClienteAsync(int clienteId)
         {
-            IQueryable<Contrato> query = context.Contratos.Include(ctr => ctr.Parcelas);
+            IQueryable<Contrato> query = context.Contratos
+                                                .Include(ctr => ctr.Parcelas)
+                                                .Include(ctr => ctr.Cliente)
+                                                .Include(ctr => ctr.Vendedor);
 
             query = query.OrderBy(ctr => ctr.Id).Where(ctr => ctr.ClienteId == clienteId);
 
             return await query.ToArrayAsync();
         }
 
-        public async Task<Contrato> GetContratoByNumeroAsync(string numeroContrato)
+        public async Task<Contrato[]> GetAllContratosByVendedorAsync(int vendedorId)
         {
-            IQueryable<Contrato> query = context.Contratos.Include(ctr => ctr.Parcelas);
+            IQueryable<Contrato> query = context.Contratos
+                                                .Include(ctr => ctr.Parcelas)
+                                                .Include(ctr => ctr.Cliente)
+                                                .Include(ctr => ctr.Vendedor);
 
-            query = query.OrderBy(ctr => ctr.Id).Where(ctr => ctr.NuContrato == numeroContrato);
+            query = query.OrderBy(ctr => ctr.Id).Where(ctr => ctr.VendedorId == vendedorId);
 
-            return await query.FirstOrDefaultAsync();
+            return await query.ToArrayAsync();
         }
 
         public async Task<Contrato> GetContratoByIdAsync(int contratoId)
         {
-            IQueryable<Contrato> query = context.Contratos.Include(ctr => ctr.Parcelas);
+            IQueryable<Contrato> query = context.Contratos
+                                                .Include(ctr => ctr.Parcelas)
+                                                .Include(ctr => ctr.Cliente)
+                                                .Include(ctr => ctr.Vendedor);
 
             query = query.OrderBy(ctr => ctr.Id).Where(ctr => ctr.Id == contratoId);
 

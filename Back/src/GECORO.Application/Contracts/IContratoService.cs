@@ -11,7 +11,7 @@ namespace GECORO.Application.Contracts
         public Task<bool> DeleteContrato(int contratoId);
         Task<ContratoDto[]> GetAllContratosAsync();
         Task<ContratoDto[]> GetAllContratosByClienteAsync(int clienteId);
-        Task<ContratoDto> GetContratoByNumeroAsync(string numeroContrato);
+        Task<ContratoDto[]> GetAllContratosByVendedorAsync(int vendedorId);
         Task<ContratoDto> GetContratoByIdAsync(int contratoId);
     }
 }

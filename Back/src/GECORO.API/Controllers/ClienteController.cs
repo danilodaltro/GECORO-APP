@@ -35,29 +35,12 @@ namespace GECORO.API.Controllers
             }
         }
 
-        [HttpGet("nome/{nome}")]
-        public async Task<IActionResult> GetByNome(string nome)
+        [HttpGet("vendedor/{id}")]
+        public async Task<IActionResult> GetByVendedor(int id)
         {
             try
             {
-                var clientes = await clienteService.GetAllClientesByNomeAsync(nome);
-                if (clientes == null) return NoContent();
-
-                return Ok(clientes);
-            }
-            catch (Exception ex)
-            {
-                return this.StatusCode(StatusCodes.Status500InternalServerError,
-                $"Erro ao tentar recuperar clientes. Erro: {ex.Message}");
-            }
-        }
-
-        [HttpGet("CPF/{cpf}")]
-        public async Task<IActionResult> GetByCPF(string cpf)
-        {
-            try
-            {
-                var cliente = await clienteService.GetClienteByCPFAsync(cpf);
+                var cliente = await clienteService.GetAllClientesByVendedorAsync(id);
                 if (cliente == null) return NoContent();
 
                 return Ok(cliente);
