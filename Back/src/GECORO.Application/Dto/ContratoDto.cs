@@ -21,5 +21,7 @@ namespace GECORO.Application.Dto
         public decimal SaldoDevedor {get; set;}
         [Required(ErrorMessage = "O valor total do contrato deve ser informado.")]
         public decimal ValorTotal {get; set;}
+        public int? VendedorId {get; set;}
+        public VendedorDto Vendedor {get; set;}
     }
 }

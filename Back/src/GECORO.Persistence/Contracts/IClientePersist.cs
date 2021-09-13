@@ -8,5 +8,6 @@ namespace GECORO.Persistence.Contracts
         Task<Cliente[]> GetAllClientesAsync();
         Task<Cliente[]> GetAllClientesByVendedor(int vendedorId);
         Task<Cliente> GetClienteByIdAsync(int id);
+        Task<Cliente> GetClienteByCPFAsync(string cpf);
     }
 }

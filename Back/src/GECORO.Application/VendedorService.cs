@@ -27,7 +27,7 @@ namespace GECORO.Application
                 var vendedor = mapper.Map<Vendedor>(model);
 
                 var validaVendedor = await vendedorPersist.GetVendedorByCodigoAsync(vendedor.Codigo);
-                if(validaVendedor != null) 
+                if (validaVendedor != null)
                     return null;
 
                 generalPersist.Add<Vendedor>(vendedor);
@@ -52,7 +52,7 @@ namespace GECORO.Application
                 if (vendedor == null) return null;
 
                 model.Id = vendedor.Id;
-                mapper.Map(model,vendedor);
+                mapper.Map(model, vendedor);
 
                 generalPersist.Update<Vendedor>(vendedor);
 
@@ -139,6 +139,22 @@ namespace GECORO.Application
             try
             {
                 var vendedor = await vendedorPersist.GetVendedorByIdAsync(vendedorId, incluiClientes);
+                if (vendedor == null) return null;
+
+                return mapper.Map<VendedorDto>(vendedor);
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<VendedorDto> GetVendedorByRegraAsync(int parcelasPagas, decimal saldoDevedor)
+        {
+            try
+            {
+                var vendedor = await vendedorPersist.GetVendedorByRegraAsync(parcelasPagas, saldoDevedor);
                 if (vendedor == null) return null;
 
                 return mapper.Map<VendedorDto>(vendedor);

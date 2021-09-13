@@ -13,6 +13,7 @@ namespace GECORO.Application.Contracts
         Task<VendedorDto[]> GetAllVendedoresByNomeAsync(string nome, bool incluiClientes);
         Task<VendedorDto> GetVendedorByCodigoAsync(string codigo, bool incluiClientes);
         Task<VendedorDto> GetVendedorByIdAsync(int vendedorId, bool incluiClientes);
+        Task<VendedorDto> GetVendedorByRegraAsync(int parcelasPagas, decimal saldoDevedor);
     }
 
 }

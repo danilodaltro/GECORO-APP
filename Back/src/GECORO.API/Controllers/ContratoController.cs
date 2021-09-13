@@ -1,7 +1,11 @@
 using System;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using GECORO.Application.Contracts;
 using GECORO.Application.Dto;
+using GECORO.Application.UseCases;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,9 +16,15 @@ namespace GECORO.API.Controllers
     public class ContratoController : ControllerBase
     {
         private readonly IContratoService contratoService;
-        public ContratoController(IContratoService contratoService)
+        private readonly IProcessamentoContratosService processamentoContratosService;
+        private readonly IWebHostEnvironment webHostEnvironment;
+        public ContratoController(IContratoService contratoService,
+                                IProcessamentoContratosService processamentoContratosService,
+                                IWebHostEnvironment webHostEnvironment)
         {
+            this.webHostEnvironment = webHostEnvironment;
             this.contratoService = contratoService;
+            this.processamentoContratosService = processamentoContratosService;
         }
 
         [HttpGet]
@@ -103,6 +113,34 @@ namespace GECORO.API.Controllers
             }
         }
 
+        [HttpPost("upload-planilha")]
+        public IActionResult Upload(ContratoDto model)
+        {
+            try
+            {
+                var file = Request.Form.Files[0];
+                if (file.Length > 0)
+                {
+                    string path = SaveFile(file).Result;
+                    if (processamentoContratosService.ProcessarContratos(path))
+                    {
+                        if (System.IO.File.Exists(path))
+                            System.IO.File.Delete(path);
+
+                        return Ok();
+                    }
+
+
+                }
+                return BadRequest("Não foi possível processar os contratos da planilha.");
+            }
+            catch (Exception ex)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError,
+                $"Erro ao tentar adicionar contrato. Erro: {ex.Message}");
+            }
+        }
+
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, ContratoDto model)
         {
@@ -136,6 +174,26 @@ namespace GECORO.API.Controllers
                 $"Erro ao tentar deletar contrato. Erro: {ex.Message}");
                 throw;
             }
+        }
+
+        [NonAction]
+        public async Task<string> SaveFile(IFormFile file)
+        {
+            string fileName = new String(Path.GetFileNameWithoutExtension(file.FileName)
+                                            .Take(10)
+                                            .ToArray()
+                                            ).Replace(' ', '-');
+
+            fileName = $"{fileName}{DateTime.UtcNow.ToString("yymmssfff")}{Path.GetExtension(file.FileName)}";
+
+            var filePath = Path.Combine(webHostEnvironment.ContentRootPath, @"Resources/", fileName);
+
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(fileStream);
+            }
+
+            return filePath;
         }
     }
 }

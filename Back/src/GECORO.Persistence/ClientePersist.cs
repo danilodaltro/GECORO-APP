@@ -27,7 +27,7 @@ namespace GECORO.Persistence
             return await query.ToArrayAsync();
         }
 
-      public async Task<Cliente[]> GetAllClientesByVendedor(int vendedorId)
+        public async Task<Cliente[]> GetAllClientesByVendedor(int vendedorId)
         {
             IQueryable<Cliente> query = context.Clientes
                                     .Include(c => c.Contratos)
@@ -38,7 +38,7 @@ namespace GECORO.Persistence
 
             return await query.ToArrayAsync();
         }
-        
+
         public async Task<Cliente> GetClienteByIdAsync(int id)
         {
             IQueryable<Cliente> query = context.Clientes
@@ -46,6 +46,17 @@ namespace GECORO.Persistence
                                         .Include(vc => vc.Vendedor);
 
             query = query.OrderBy(c => c.Id).Where(c => c.Id == id);
+
+            return await query.FirstOrDefaultAsync();
+        }
+
+        public async Task<Cliente> GetClienteByCPFAsync(string cpf)
+        {
+            IQueryable<Cliente> query = context.Clientes
+                                        .Include(c => c.Contratos)
+                                        .Include(vc => vc.Vendedor);
+
+            query = query.OrderBy(c => c.Id).Where(c => c.CPF == cpf);
 
             return await query.FirstOrDefaultAsync();
         }

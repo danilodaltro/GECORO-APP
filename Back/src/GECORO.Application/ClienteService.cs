@@ -130,5 +130,21 @@ namespace GECORO.Application
             }
         }
 
+        public async Task<ClienteDto> GetClienteByCPFAsync(string cpf)
+        {
+            try
+            {
+                var cliente = await clientePersist.GetClienteByCPFAsync(cpf);
+                if (cliente == null) return null;
+
+                return mapper.Map<ClienteDto>(cliente);
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
     }
 }

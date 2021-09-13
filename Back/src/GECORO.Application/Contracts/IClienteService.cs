@@ -12,5 +12,6 @@ namespace GECORO.Application.Contracts
         Task<ClienteDto[]> GetAllClientesAsync();
         Task<ClienteDto[]> GetAllClientesByVendedorAsync(int vendedorId);
         Task<ClienteDto> GetClienteByIdAsync(int clienteId);
+        public Task<ClienteDto> GetClienteByCPFAsync(string cpf);
     }
 }
