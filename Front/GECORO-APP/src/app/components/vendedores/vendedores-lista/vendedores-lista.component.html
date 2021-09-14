@@ -26,17 +26,15 @@
           <th>Código</th>
           <th>Clientes</th>
           <th>Contratos</th>
-          <th>Regras</th>
           <th>Opções</th>
       </tr>
       </thead>
       <tbody >
         <tr *ngFor="let vendedor of vendedoresFiltrados">
-          <td>{{vendedor.nome}}</td>
+          <td><a routerLink="/vendedores/detalhes/{{vendedor.id}}">{{vendedor.nome}}</a></td>
           <td>{{vendedor.codigo}}</td>
           <td><a routerLink="/clientes/vendedor/{{vendedor.id}}">Clientes</a></td>
           <td><a routerLink="/contratos/vendedor/{{vendedor.id}}">Contratos</a></td>
-          <td>Regras</td>
           <td>
             <button type="button" class="btn btn-primary btn-sm me-2" tooltip="Editar">
               <i class="fa fa-edit"></i>

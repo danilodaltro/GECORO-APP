@@ -16,6 +16,7 @@ const routes: Routes = [
   {path: 'vendedores', redirectTo: 'vendedores/lista'},
   {path: 'vendedores', component: VendedoresComponent,
    children:[
+     {path: 'detalhes/:id', component: VendedoresDetalhesComponent},
     {path: 'detalhes', component: VendedoresDetalhesComponent},
     {path: 'lista', component: VendedoresListaComponent}
    ]
@@ -24,8 +25,9 @@ const routes: Routes = [
   {path: 'clientes', component: ClientesComponent,
    children:[
      {path: 'vendedor/:id', component: ClientesListaComponent},
+     {path: 'lista', component: ClientesListaComponent},
      {path: 'detalhes', component: ClientesDetalhesComponent},
-     {path: 'lista', component: ClientesListaComponent}
+     {path: 'detalhes/:id', component: ClientesDetalhesComponent}
    ]
   },
   {path: 'contratos', redirectTo: 'contratos/lista'},

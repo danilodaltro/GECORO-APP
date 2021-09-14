@@ -31,7 +31,7 @@
       </thead>
       <tbody >
         <tr *ngFor="let cliente of clientesFiltrados">
-          <td>{{cliente.nome}}</td>
+          <td><a routerLink="/clientes/detalhes/{{cliente.id}}">{{cliente.nome}}</a></td>
           <td>{{cliente.cpf | cpfPipe}}</td>
           <td>{{cliente.vendedor.nome}}</td>
           <td><a routerLink="/contratos/cliente/{{cliente.id}}">Contratos</a></td>

@@ -21,8 +21,35 @@
         <div *ngIf="f.codigo.errors?.maxlength || f.codigo.errors?.minlength" class="invalid-feedback">
           Código deve ter 5 digitos
         </div>
-        <div *ngIf="f.cpf.errors?.pattern" class="invalid-feedback">
+        <div *ngIf="f.codigo.errors?.pattern" class="invalid-feedback">
           Código formado apenas por números
+        </div>
+      </div>
+    </div>
+    <div class="form-row rounded" formGroupName="regraVendedorForm">
+      <div class="d-grid">
+        <div class="btn-dark btn-sm" style="cursor: text;">Para atribuição de contratos: </div>
+        <div class="d-flex mt-3 me-auto">
+          <div class="form-group col-md-5">
+            <label>Parcelas pagas</label>
+            <input type="number" class="form-control" placeholder=""
+            formControlName="parcelasPagas"
+            [(ngModel)]="vendedor.regraVendedor.parcelasPagas"
+            value="{{vendedor.regraVendedor?.parcelasPagas}}">
+            <div *ngIf="f.codigo.errors?.pattern" class="invalid-feedback">
+              Código formado apenas por números
+            </div>
+          </div>
+          <div class="form-group col-md-5">
+            <label>Saldo devedor</label>
+            <input type="text" class="form-control" placeholder=""
+            formControlName="saldoDevedor"
+            [(ngModel)]="vendedor.regraVendedor.saldoDevedor"
+            value={{vendedor.regraVendedor?.saldoDevedor}}>
+            <div *ngIf="f.codigo.errors?.pattern" class="invalid-feedback">
+              Código formado apenas por números
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -34,7 +61,7 @@
         Cancelar
         </button>
       </a>
-      <button class="btn btn-success">
+      <button class="btn btn-success" (click)="SalvarAlteracoes()">
         Salvar
       </button>
     </div>
