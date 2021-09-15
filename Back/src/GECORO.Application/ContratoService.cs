@@ -183,7 +183,9 @@ namespace GECORO.Application
                     contrato.ClienteId = cliente.Id;
                                
                     var vendedor = await vendedorPersist
-                                        .GetVendedorByRegraAsync(parcelasPagas,contrato.SaldoDevedor);
+                                        .GetVendedorByRegraAsync(parcelasPagas,
+                                                                 contrato.SaldoDevedor,
+                                                                 cliente.CPF);
 
                     contrato.VendedorId = vendedor.Id;
 

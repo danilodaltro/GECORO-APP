@@ -9,6 +9,6 @@ namespace GECORO.Persistence.Contracts
         Task<Vendedor[]> GetAllVendedoresByNomeAsync(string nome, bool incluiClientes = false);
         Task<Vendedor> GetVendedorByCodigoAsync(string codigo, bool incluiClientes = false);
         Task<Vendedor> GetVendedorByIdAsync(int id, bool incluiClientes = false);
-        Task<Vendedor> GetVendedorByRegraAsync(int parcelasPagas, decimal saldoDevedor);
+        Task<Vendedor> GetVendedorByRegraAsync(int parcelasPagas, decimal saldoDevedor,string cpfCliente);
     }
 }

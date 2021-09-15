@@ -150,11 +150,15 @@ namespace GECORO.Application
             }
         }
 
-        public async Task<VendedorDto> GetVendedorByRegraAsync(int parcelasPagas, decimal saldoDevedor)
+        public async Task<VendedorDto> GetVendedorByRegraAsync(int parcelasPagas, 
+                                                                decimal saldoDevedor,
+                                                                string cpfCliente)
         {
             try
             {
-                var vendedor = await vendedorPersist.GetVendedorByRegraAsync(parcelasPagas, saldoDevedor);
+                var vendedor = await vendedorPersist.GetVendedorByRegraAsync(parcelasPagas, 
+                                                                             saldoDevedor,
+                                                                             cpfCliente);
                 if (vendedor == null) return null;
 
                 return mapper.Map<VendedorDto>(vendedor);

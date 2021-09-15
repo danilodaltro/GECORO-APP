@@ -69,12 +69,18 @@ namespace GECORO.Persistence
         }
 
         
-        public async Task<Vendedor> GetVendedorByRegraAsync(int parcelasPagas, decimal saldoDevedor)
+        public async Task<Vendedor> GetVendedorByRegraAsync(int parcelasPagas,
+                                                            decimal saldoDevedor,
+                                                            string cpfCliente)
         {
-            IQueryable<Vendedor> query = context.Vendedores.Include(v => v.RegraVendedor);
+            IQueryable<Vendedor> query = context.Vendedores
+                                                .Include(v => v.RegraVendedor)
+                                                .Include(v => v.Clientes);
 
-            query = query.OrderBy(c => c.Id).Where(v => v.RegraVendedor.ParcelasPagas >= parcelasPagas
-                                                    && v.RegraVendedor.SaldoDevedor >= saldoDevedor);
+            query = query.OrderBy(c => c.Id).Where(v => (v.RegraVendedor.ParcelasPagas >= parcelasPagas
+                                                    && v.RegraVendedor.SaldoDevedor >= saldoDevedor)
+                                                    && v.Clientes.Any(c => c.CPF == cpfCliente));
+                                                    
 
             return await query.FirstOrDefaultAsync();
         }
