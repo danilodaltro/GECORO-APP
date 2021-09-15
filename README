@@ -1,0 +1,9 @@
+- Existem erros no cadastro do cliente (necessita implementar a escolha de um vendedor vinculado) e no cadastro do vendedor (erro ao cadastrar as informação da regra de venda -> saldo devedor e parcelas pagas).
+- As funções de delete não foram implementadas
+- O upload da planilha para inserção dos contratos não foi implementado, logo a rotina de inserção dos contratos não foi testada
+- O cadastro e controle de usuários não foi implementado.
+- Testes unitários não foram implementados
+
+As tecnologias utilizadas foram:
+- Angular 11 -> Última versão (necessário instalação do NPM)
+- .NET CORE 5 -> Última versão
