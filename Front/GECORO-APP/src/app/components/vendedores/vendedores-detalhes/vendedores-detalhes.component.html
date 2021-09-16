@@ -26,28 +26,37 @@
         </div>
       </div>
     </div>
-    <div class="form-row rounded" formGroupName="regraVendedorForm">
+    <div class="form-row rounded">
       <div class="d-grid">
         <div class="btn-dark btn-sm" style="cursor: text;">Para atribuição de contratos: </div>
         <div class="d-flex mt-3 me-auto">
           <div class="form-group col-md-5">
             <label>Parcelas pagas</label>
             <input type="number" class="form-control" placeholder=""
-            formControlName="parcelasPagas"
-            [(ngModel)]="vendedor.regraVendedor.parcelasPagas"
-            value="{{vendedor.regraVendedor?.parcelasPagas}}">
-            <div *ngIf="f.codigo.errors?.pattern" class="invalid-feedback">
-              Código formado apenas por números
+            formControlName="parcelas"
+            [(ngModel)]="parcelasPagas"
+            value="{{_parcelasPagas}}"
+            [ngClass]="{'is-invalid': f.parcelas.errors && f.parcelas.touched}">
+            <div *ngIf="f.parcelas.errors?.required" class="invalid-feedback">
+              Parcelas pagas para vínculo de contratos é obrigatório
+            </div>
+            <div *ngIf="f.parcelas.errors?.pattern" class="invalid-feedback">
+              O campo de parcelas pagas só aceita números.
             </div>
           </div>
           <div class="form-group col-md-5">
             <label>Saldo devedor</label>
             <input type="text" class="form-control" placeholder=""
-            formControlName="saldoDevedor"
-            [(ngModel)]="vendedor.regraVendedor.saldoDevedor"
-            value={{vendedor.regraVendedor?.saldoDevedor}}>
-            <div *ngIf="f.codigo.errors?.pattern" class="invalid-feedback">
-              Código formado apenas por números
+            [(ngModel)]="saldoDevedor"
+            formControlName="saldoDev"
+            [ngClass]="{'is-invalid': f.saldoDev.errors && f.saldoDev.touched}"
+            value={{_saldoDevedor}}>
+            <div *ngIf="f.saldoDev.errors?.required" class="invalid-feedback">
+              Saldo devedor para vínculo de contratos é obrigatório
+            </div>
+            <div *ngIf="f.saldoDev.errors?.pattern" class="invalid-feedback">
+              O campo de saldo devedor deve ser informado como
+              número com duas casas decimais separadas por vírgula. Ex: 1300,30
             </div>
           </div>
         </div>

@@ -15,10 +15,11 @@ import { VendedorService } from 'src/app/services/vendedor.service';
 })
 export class VendedoresDetalhesComponent implements OnInit {
   form: FormGroup = new FormGroup({});
-  regraVendedorForm: FormGroup = new FormGroup({});
-  vendedor = {} as Vendedor
-  regraVendedor = {} as RegraVendedor
-
+  vendedor = {} as Vendedor;
+  regraVendedor = {} as RegraVendedor;
+  estadoSalvar: string = 'post';
+  _parcelasPagas: any;
+  _saldoDevedor: any;
   get f(): any{
     return this.form.controls;
   }
@@ -32,6 +33,22 @@ export class VendedoresDetalhesComponent implements OnInit {
     private router: Router) {
    }
 
+   public get parcelasPagas(){
+    return this._parcelasPagas;
+   }
+
+   public set parcelasPagas(value: number){
+     this._parcelasPagas = value;
+   }
+
+   public get saldoDevedor(){
+    return this._saldoDevedor;
+  }
+
+   public set saldoDevedor(value: number){
+    this._saldoDevedor = value;
+  }
+
   ngOnInit() {
     this.carregarVendedor();
     this.validation();
@@ -42,12 +59,9 @@ export class VendedoresDetalhesComponent implements OnInit {
       nome: ['',Validators.required],
       codigo: ['',[Validators.required, Validators.minLength(5), Validators.maxLength(5),
                 Validators.pattern("[0-9]{5}")]],
-        regraVendedorForm: this.fb.group({
-        parcelasPagas: ['', Validators.required],
-        saldoDevedor: ['', Validators.required]
-      })
+      parcelas: ['', [Validators.required, Validators.pattern("[0-9]+")]],
+      saldoDev: ['', [Validators.required,Validators.pattern("[0-9]+,[0-9]{2}")]]
     });
-
   }
 
   public carregarVendedor(): void{
@@ -57,6 +71,10 @@ export class VendedoresDetalhesComponent implements OnInit {
           (vendedor: Vendedor) => {
             this.vendedor = {... vendedor};
             this.form.patchValue(this.vendedor);
+            this.regraVendedor.id = this.vendedor.regraVendedor.id;
+            this._parcelasPagas = vendedor.regraVendedor.parcelasPagas;
+            this._saldoDevedor = vendedor.regraVendedor.saldoDevedor;
+            this.estadoSalvar = 'put';
           },
           (error: any) =>{
             console.log(error);
@@ -67,14 +85,16 @@ export class VendedoresDetalhesComponent implements OnInit {
 
   public SalvarAlteracoes(): void{
     if(this.form.valid){
+      alert(this.estadoSalvar);
+      this.vendedor = this.estadoSalvar == 'post'?
+                     {... this.form.value}:
+                     {id: this.vendedor.id, ... this.form.value};
 
-      this.vendedor = {... this.form.value}
-      this.regraVendedor.parcelasPagas = this.regraVendedorForm.value['parcelasPagas'];
-      this.regraVendedor.saldoDevedor = this.regraVendedorForm.value['saldoDevedor'];
+      this.regraVendedor.parcelasPagas = this._parcelasPagas;
+      this.regraVendedor.saldoDevedor = this._saldoDevedor;
       this.vendedor.regraVendedor = this.regraVendedor;
 
-
-      this.vendedorService.post(this.vendedor).subscribe(
+      this.vendedorService[this.estadoSalvar == 'post' ? 'post' : 'put'](this.vendedor).subscribe(
         () => this.toastr.success('Vendedor salvo com sucesso!', 'Sucesso'),
         (error: any) => {
           console.log(error);

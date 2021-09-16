@@ -1,3 +1,4 @@
+import { Vendedor } from './../../../models/Vendedor';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
@@ -18,6 +19,8 @@ export class ClientesListaComponent implements OnInit {
   public clientesFiltrados: Cliente[] = [];
   public _filtroLista: string = "";
   public nomeBtnFiltro: string = "CPF";
+  public clienteDeletar = {} as Cliente;
+
   constructor(
     private clienteService: ClienteService,
     private modalService: BsModalService,
@@ -85,6 +88,11 @@ export class ClientesListaComponent implements OnInit {
       {
         this.clientes = clientes;
         this.clientesFiltrados = this.clientes;
+        this.clientesFiltrados.forEach(cliente => {
+          if(cliente.vendedorId == 0){
+            cliente.vendedor = { nome: ''} as Vendedor;
+          }
+        });
       },
       (error: any) =>
       {
@@ -96,6 +104,20 @@ export class ClientesListaComponent implements OnInit {
 
   confirm(): void {
     this.modalRef?.hide();
+    this.spinner.show();
+
+    this.clienteService.delete(this.clienteDeletar.id).subscribe(
+      (result: any) =>{
+        this.toastr.success('O cliente foi deletado com sucesso.', 'Deletado!');
+        this.getClientes();
+      },
+      (error: any) => {
+        console.error(error);
+        this.toastr.error('Erro ao deletar cliente!', 'Erro!');
+      },
+    ).add(() => this.spinner.hide());
+
+
     this.toastr.success('O cliente foi deletado com sucesso.', 'Deletado!');
   }
 
@@ -103,7 +125,8 @@ export class ClientesListaComponent implements OnInit {
     this.modalRef?.hide();
   }
 
-  openModal(template: TemplateRef<any>): void {
+  openModal(template: TemplateRef<any>, clt: Cliente): void {
     this.modalRef = this.modalService.show(template, {class: 'modal-sm'});
+    this.clienteDeletar = clt;
   }
 }

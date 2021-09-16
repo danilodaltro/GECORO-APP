@@ -31,15 +31,18 @@
       </thead>
       <tbody >
         <tr *ngFor="let vendedor of vendedoresFiltrados">
-          <td><a routerLink="/vendedores/detalhes/{{vendedor.id}}">{{vendedor.nome}}</a></td>
+          <td>{{vendedor.nome}}</td>
           <td>{{vendedor.codigo}}</td>
           <td><a routerLink="/clientes/vendedor/{{vendedor.id}}">Clientes</a></td>
           <td><a routerLink="/contratos/vendedor/{{vendedor.id}}">Contratos</a></td>
           <td>
-            <button type="button" class="btn btn-primary btn-sm me-2" tooltip="Editar">
-              <i class="fa fa-edit"></i>
-            </button>
-            <button type="button" class="btn btn-danger btn-sm" tooltip="Excluir" (click)="openModal(template)">
+            <a routerLink="/vendedores/detalhes/{{vendedor.id}}">
+              <button type="button" class="btn btn-primary btn-sm me-2" tooltip="Editar">
+                <i class="fa fa-edit"></i>
+              </button>
+            </a>
+            <button type="button" class="btn btn-danger btn-sm" tooltip="Excluir"
+                (click)="openModal(template, vendedor)">
               <i class="fa fa-trash"></i>
             </button>
           </td>
@@ -58,8 +61,8 @@
 
 <ng-template #template>
   <div class="modal-body text-center">
-    <p>Tem certeza que quer deletar este cliente?</p>
-    <button type="button" class="btn btn-default" (click)="confirm()" >Sim</button>
-    <button type="button" class="btn btn-primary" (click)="decline()" >Não</button>
+    <p>Tem certeza que quer deletar {{this.vendedorDeletar.nome}}?</p>
+    <button type="button" class="btn btn-success me-5" (click)="confirm()" >Sim</button>
+    <button type="button" class="btn btn-danger ms-5" (click)="decline()" >Não</button>
   </div>
 </ng-template>

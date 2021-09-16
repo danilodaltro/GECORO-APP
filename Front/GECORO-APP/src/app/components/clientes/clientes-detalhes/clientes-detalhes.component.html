@@ -28,6 +28,25 @@
         </div>
       </div>
     </div>
+    <div class="form-row">
+      <div class="form-group col-md-5">
+        <label>Vendedor </label>
+        <div ngbDropdown class="dropdown">
+          <button ngbDropdownToggle (click)="showDropdown()" data-toggle="dropdown"
+                  class="btn dropdown-toggle btn-primary">
+            {{vendedorCliente.nome}}
+          </button>
+          <div class="dropdown-menu dropdown-menu-dark" role="menu" ngbDropdownMenu [ngClass]="{'show': toggleFlag}">
+            <button *ngFor="let vendedor of vendedores" ngbDropdownItem
+            class="btn btn-dark dropdown-item"
+            (click)="alteraVendedorSelecionado(vendedor)">
+              {{vendedor.nome}}
+            </button>
+          </div>
+        </div>
+        <p *ngIf="!vendedorClienteRequired" class="mt-2">Selecionar um vendedor é obrigatório</p>
+      </div>
+    </div>
   </div>
   <div class="card-footer">
     <div class="d-flex">
@@ -36,7 +55,7 @@
         Cancelar
         </button>
       </a>
-      <button class="btn btn-success" (click)='SalvarAlteracoes()'>
+      <button *ngIf="vendedorClienteRequired" class="btn btn-success" (click)='SalvarAlteracoes()'>
         Salvar
       </button>
     </div>

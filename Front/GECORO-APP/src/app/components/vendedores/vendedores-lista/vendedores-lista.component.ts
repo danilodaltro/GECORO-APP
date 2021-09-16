@@ -3,7 +3,6 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { Vendedor } from 'src/app/models/Vendedor';
-import { ContratoService } from 'src/app/services/contrato.service';
 import { VendedorService } from 'src/app/services/vendedor.service';
 
 @Component({
@@ -19,6 +18,7 @@ export class VendedoresListaComponent implements OnInit {
   public vendedoresFiltrados: Vendedor[] = [];
   private _filtroLista: string = "";
   public nomeBtnFiltro: string = "Código";
+  public vendedorDeletar = {} as Vendedor;
   constructor(
     private vendedorService: VendedorService,
     private modalService: BsModalService,
@@ -28,7 +28,7 @@ export class VendedoresListaComponent implements OnInit {
 
   ngOnInit() {
     this.spinner.show();
-    this.getContratos();
+    this.getVendedores();
   }
 
   public alternarBtn(){
@@ -58,7 +58,7 @@ export class VendedoresListaComponent implements OnInit {
     }
   }
 
-  public getContratos(): void {
+  public getVendedores(): void {
     this.vendedorService.getVendedores().subscribe(
       (vendedores: Vendedor[]) =>
       {
@@ -75,15 +75,27 @@ export class VendedoresListaComponent implements OnInit {
 
   confirm(): void {
     this.modalRef?.hide();
+    this.spinner.show();
 
-    this.toastr.success('O cliente foi deletado com sucesso.', 'Deletado!');
+   this.vendedorService.delete(this.vendedorDeletar.id).subscribe(
+     (result: any) =>{
+          this.toastr.success('O vendedor foi deletado com sucesso.', 'Deletado!');
+          this.getVendedores();
+      },
+     (error: any) => {
+       console.error(error);
+       this.toastr.error('Erro ao deletar vendedor!', 'Erro!');
+     },
+
+   ).add(() => this.spinner.hide());
   }
 
   decline(): void {
     this.modalRef?.hide();
   }
 
-  openModal(template: TemplateRef<any>): void {
+  openModal(template: TemplateRef<any>, vend: Vendedor): void {
+    this.vendedorDeletar = vend;
     this.modalRef = this.modalService.show(template, {class: 'modal-sm'});
   }
 
