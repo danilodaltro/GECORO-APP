@@ -110,7 +110,7 @@ namespace GECORO.API.Controllers
             try
             {
                 return await clienteService.DeleteCliente(id) ?
-                            Ok("Deletado.") :
+                            Ok( new { message = "Deletado"}) :
                             BadRequest("Cliente não deletado.");
 
             }

@@ -94,7 +94,7 @@ namespace GECORO.API.Controllers
             try
             {
                 return await parcelaService.DeleteParcela(id) ?
-                            Ok("Deletada.") :
+                            Ok( new { message = "Deletado"}) :
                             BadRequest("Parcela não deletada.");
 
             }

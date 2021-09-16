@@ -126,7 +126,7 @@ namespace GECORO.API.Controllers
             try
             {
                 return await vendedorService.DeleteVendedor(id) ?
-                            Ok("Deletado.") :
+                            Ok( new { message = "Deletado"}) :
                             BadRequest("Vendedor não deletado.");
 
             }

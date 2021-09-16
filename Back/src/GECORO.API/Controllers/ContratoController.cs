@@ -160,7 +160,7 @@ namespace GECORO.API.Controllers
             try
             {
                 return await contratoService.DeleteContrato(id) ?
-                            Ok("Deletado.") :
+                            Ok( new { message = "Deletado"}) :
                             BadRequest("Contrato não deletado.");
 
             }
