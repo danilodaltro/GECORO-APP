@@ -41,4 +41,13 @@ export class ContratoService {
   public delete(id: number): Observable<any>{
     return this.http.delete(`${this.baseURL}/${id}`).pipe(take(1));
   }
+
+  public postUpload(file: File): Observable<any>{
+    const fileToUpload =  file as File;
+    const formData = new FormData();
+    formData.append('file', fileToUpload);
+
+
+    return this.http.post(`${this.baseURL}/upload-planilha`,formData).pipe(take(1));
+  }
 }

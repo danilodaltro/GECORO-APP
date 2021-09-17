@@ -10,8 +10,12 @@
               </div>
             </div>
           </div>
-          <input type="file" class="form-control" placeholder="caminho" [(ngModel)]="filtroLista">
-          <button class="btn btn-outline-warning btn-dark ms-2">
+          <input type="file" #file class="form-control file-upload" placeholder="caminho"
+          [(ngModel)]="caminhoArquivo"
+          (change)="onFileChange($event)"
+          accept=".xlsx,.xls">
+          <button class="btn btn-outline-warning btn-dark ms-2"
+          (click)="uploadPlanilha()">
             Carregar
           </button>
         </div>

@@ -2,7 +2,6 @@ import { RegraVendedor } from './../../../models/RegraVendedor';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BsModalService } from 'ngx-bootstrap/modal';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { Vendedor } from 'src/app/models/Vendedor';
@@ -18,19 +17,18 @@ export class VendedoresDetalhesComponent implements OnInit {
   vendedor = {} as Vendedor;
   regraVendedor = {} as RegraVendedor;
   estadoSalvar: string = 'post';
-  _parcelasPagas: any;
-  _saldoDevedor: any;
+  _parcelasPagas: any = '';
+  _saldoDevedor: any = '';
   get f(): any{
     return this.form.controls;
   }
 
   constructor(private fb: FormBuilder,
     private vendedorService: VendedorService,
-    private modalService: BsModalService,
     private toastr: ToastrService,
     private spinner: NgxSpinnerService,
-    private activeRoute: ActivatedRoute,
-    private router: Router) {
+    private activeRoute: ActivatedRoute) {
+
    }
 
    public get parcelasPagas(){
@@ -60,7 +58,7 @@ export class VendedoresDetalhesComponent implements OnInit {
       codigo: ['',[Validators.required, Validators.minLength(5), Validators.maxLength(5),
                 Validators.pattern("[0-9]{5}")]],
       parcelas: ['', [Validators.required, Validators.pattern("[0-9]+")]],
-      saldoDev: ['', [Validators.required,Validators.pattern("[0-9]+,[0-9]{2}")]]
+      saldoDev: ['', [Validators.required,Validators.pattern("[0-9]+\.[0-9]{2}")]]
     });
   }
 
@@ -71,9 +69,11 @@ export class VendedoresDetalhesComponent implements OnInit {
           (vendedor: Vendedor) => {
             this.vendedor = {... vendedor};
             this.form.patchValue(this.vendedor);
-            this.regraVendedor.id = this.vendedor.regraVendedor.id;
-            this._parcelasPagas = vendedor.regraVendedor.parcelasPagas;
-            this._saldoDevedor = vendedor.regraVendedor.saldoDevedor;
+            if(Object.values(this.vendedor.regraVendedor).length > 0){
+              this._parcelasPagas = vendedor.regraVendedor.parcelasPagas;
+              this._saldoDevedor = vendedor.regraVendedor.saldoDevedor;
+              this.regraVendedor = this.vendedor.regraVendedor;
+            }
             this.estadoSalvar = 'put';
           },
           (error: any) =>{
@@ -85,7 +85,6 @@ export class VendedoresDetalhesComponent implements OnInit {
 
   public SalvarAlteracoes(): void{
     if(this.form.valid){
-      alert(this.estadoSalvar);
       this.vendedor = this.estadoSalvar == 'post'?
                      {... this.form.value}:
                      {id: this.vendedor.id, ... this.form.value};

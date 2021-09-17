@@ -32,7 +32,7 @@
         <div class="d-flex mt-3 me-auto">
           <div class="form-group col-md-5">
             <label>Parcelas pagas</label>
-            <input type="number" class="form-control" placeholder=""
+            <input type="number" class="form-control" placeholder="Ex: 15"
             formControlName="parcelas"
             [(ngModel)]="parcelasPagas"
             value="{{_parcelasPagas}}"
@@ -46,7 +46,7 @@
           </div>
           <div class="form-group col-md-5">
             <label>Saldo devedor</label>
-            <input type="text" class="form-control" placeholder=""
+            <input type="text" class="form-control" placeholder="Ex: 150.25"
             [(ngModel)]="saldoDevedor"
             formControlName="saldoDev"
             [ngClass]="{'is-invalid': f.saldoDev.errors && f.saldoDev.touched}"
@@ -56,7 +56,7 @@
             </div>
             <div *ngIf="f.saldoDev.errors?.pattern" class="invalid-feedback">
               O campo de saldo devedor deve ser informado como
-              número com duas casas decimais separadas por vírgula. Ex: 1300,30
+              número com duas casas decimais separadas por ponto. Ex: 1300.30
             </div>
           </div>
         </div>

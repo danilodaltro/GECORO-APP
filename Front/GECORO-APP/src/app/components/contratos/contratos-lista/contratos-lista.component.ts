@@ -17,6 +17,8 @@ export class ContratosListaComponent implements OnInit {
   public contratos: Contrato[] = [];
   public contratosFiltrados: Contrato[] = [];
   private _filtroLista: string = "";
+  public file: any = null;
+  public caminhoArquivo: string = '';
   constructor(
     private contratoService: ContratoService,
     private modalService: BsModalService,
@@ -117,5 +119,30 @@ export class ContratosListaComponent implements OnInit {
 
   openModal(template: TemplateRef<any>): void {
     this.modalRef = this.modalService.show(template, {class: 'modal-sm'});
+  }
+
+  public onFileChange(event: any): void{
+    if(event.target.files && event.target.files[0]){
+      this.file = event.target.files[0];
+    }
+  }
+
+  public uploadPlanilha(): void{
+    if(this.file != null){
+        if(!this.caminhoArquivo.endsWith('.xlsx')){
+          this.toastr.warning('O formato do arquivo é inválido');
+          return;
+        }
+        this.spinner.show();
+        this.contratoService.postUpload(this.file).subscribe(
+          () => {
+            this.toastr.success('Contratos processados com sucesso.','Sucesso');
+          },
+          (error: any) => {
+            this.toastr.error('Ocorreu um erro ao processar os contratos.','Erro');
+            console.log(error);
+          }
+        ).add(() => this.spinner.hide());
+    }
   }
 }
