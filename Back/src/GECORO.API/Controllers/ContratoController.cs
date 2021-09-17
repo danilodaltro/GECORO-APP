@@ -110,30 +110,31 @@ namespace GECORO.API.Controllers
         }
 
         [HttpPost("upload-planilha")]
-        public IActionResult Upload(ContratoDto model)
+        public IActionResult Upload()
         {
             try
             {
-                var file = Request.Form.Files[0];
-                if (file.Length > 0)
+                if (Request.Form.Files.Count > 0)
                 {
-                    string path = SaveFile(file).Result;
-                    if (contratoService.ProcessaContratoViaPlanilha(path).Result)
+                    var file = Request.Form.Files[0];
+                    if (file.Length > 0)
                     {
-                        if (System.IO.File.Exists(path))
-                            System.IO.File.Delete(path);
+                        string path = SaveFile(file).Result;
+                        if (contratoService.ProcessaContratoViaPlanilha(path).Result)
+                        {
+                            if (System.IO.File.Exists(path))
+                                System.IO.File.Delete(path);
 
-                        return Ok();
+                            return Ok();
+                        }
                     }
-
-
                 }
                 return BadRequest("Não foi possível processar os contratos da planilha.");
             }
             catch (Exception ex)
             {
                 return this.StatusCode(StatusCodes.Status500InternalServerError,
-                $"Erro ao tentar adicionar contrato. Erro: {ex.Message}");
+                $"Erro ao tentar processar contratos. Erro: {ex.Message}");
             }
         }
 
@@ -160,7 +161,7 @@ namespace GECORO.API.Controllers
             try
             {
                 return await contratoService.DeleteContrato(id) ?
-                            Ok( new { message = "Deletado"}) :
+                            Ok(new { message = "Deletado" }) :
                             BadRequest("Contrato não deletado.");
 
             }

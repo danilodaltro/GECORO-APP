@@ -77,7 +77,7 @@ namespace GECORO.Persistence
                                                 .Include(v => v.RegraVendedor)
                                                 .Include(v => v.Clientes);
 
-            query = query.OrderBy(c => c.Id).Where(v => (v.RegraVendedor.ParcelasPagas >= parcelasPagas
+            query = query.OrderBy(v => v.Id).Where(v => (v.RegraVendedor.ParcelasPagas >= parcelasPagas
                                                     && v.RegraVendedor.SaldoDevedor >= saldoDevedor)
                                                     && v.Clientes.Any(c => c.CPF == cpfCliente));
                                                     

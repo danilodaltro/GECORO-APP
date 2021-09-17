@@ -164,28 +164,35 @@ namespace GECORO.Application
                 var planilha = xls.Worksheets.First(w => w.Name == "Planilha1");
                 int totalContratos = planilha.Rows().Count();
                 List<Parcela> listParcelas = new List<Parcela>();
-                for (int i = 2; i < totalContratos; i++)
+                for (int i = 2; i <= totalContratos; i++)
                 {
                     Contrato contrato = new Contrato();
 
-                    int parcelasTotais = Convert.ToInt32(planilha.Row(i).Cell(4).ToString()),
-                        parcelasPagas = Convert.ToInt32(planilha.Row(i).Cell(5).ToString());
+                    int parcelasTotais = Convert.ToInt32(planilha.Row(i).Cell(4).CachedValue.ToString()),
+                        parcelasPagas = Convert.ToInt32(planilha.Row(i).Cell(5).CachedValue.ToString());
 
-                    decimal valorParcelas = Convert.ToDecimal(planilha.Row(i).Cell(6).ToString());
+                    decimal valorParcelas = Convert.ToDecimal(planilha.Row(i).Cell(6).CachedValue.ToString());
 
-                    contrato.NuContrato = planilha.Row(i).Cell(1).ToString();
-                    contrato.ValorTotal = Convert.ToDecimal(planilha.Row(i).Cell(2).ToString());
-                    contrato.SaldoDevedor = Convert.ToDecimal(planilha.Row(i).Cell(3).ToString());
+                    contrato.NuContrato = planilha.Row(i).Cell(1).CachedValue.ToString();
+                    contrato.ValorTotal = Convert.ToDecimal(planilha.Row(i).Cell(2).CachedValue.ToString());
+                    contrato.SaldoDevedor = Convert.ToDecimal(planilha.Row(i).Cell(3).CachedValue.ToString());
 
                     
                     var cliente = await this.clientePersist
-                                        .GetClienteByCPFAsync(planilha.Row(i).Cell(7).ToString());
+                                        .GetClienteByCPFAsync(planilha.Row(i).Cell(7).CachedValue.ToString());
+
+                    if(cliente == null)
+                        return false;
+
                     contrato.ClienteId = cliente.Id;
                                
                     var vendedor = await vendedorPersist
                                         .GetVendedorByRegraAsync(parcelasPagas,
                                                                  contrato.SaldoDevedor,
                                                                  cliente.CPF);
+
+                    if(vendedor == null)
+                        return false;
 
                     contrato.VendedorId = vendedor.Id;
 
@@ -200,9 +207,11 @@ namespace GECORO.Application
                             parcela.StParcela = SituacaoParcela.Aberta;
 
                         listParcelas.Add(parcela);
+                        //generalPersist.Add(parcela);
                     }
                     contrato.Parcelas = listParcelas;
                     generalPersist.Add(contrato);
+                    return await generalPersist.SaveChangesAsync();
                 }
             }
             return true;
